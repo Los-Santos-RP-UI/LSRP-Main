@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Los Santos Roleplay | Immersive Roleplay Community</title>
+  <link rel="icon" href="/Assets/Untitled263_20250227115850-1-1.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'orbitron': ['Orbitron', 'sans-serif'],
+            'inter': ['Inter', 'sans-serif']
+          },
+          colors: {
+            'lsrp-red': '#e63946',
+            'lsrp-dark': '#0d0d0d',
+            'lsrp-gray': '#1a1a1a'
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0d0d0d;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+    }
+    
+    .section {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, rgba(13,13,13,0.9) 0%, rgba(230,57,70,0.5) 100%);
+    }
+    
+    .feature-card {
+      transition: all 0.3s ease;
+      background: rgba(26, 26, 26, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 25px rgba(230, 57, 70, 0.3);
+      border-color: rgba(230, 57, 70, 0.5);
+    }
+    
+    .testimonial-card {
+      background: rgba(26, 26, 26, 0.7);
+      backdrop-filter: blur(5px);
+      border-left: 4px solid #e63946;
+    }
+    
+    .marquee {
+      height: 80px;
+      background-color: #1a1a1a;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .marquee-content {
+      display: flex;
+      animation: scroll 20s linear infinite;
+      white-space: nowrap;
+    }
+    
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+    }
+    
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: #e63946;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+    
+    .navbar {
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .navbar.scrolled {
+      background-color: rgba(13, 13, 13, 0.95);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .department-icon {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+      color: #e63946;
+    }
+    
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(230, 57, 70, 0.3);
+      border-radius: 50%;
+      border-top-color: #e63946;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .contact-input {
+      background: rgba(26, 26, 26, 0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .contact-input:focus {
+      border-color: #e63946;
+      box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+    }
+    
+    .social-icon {
+      transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+      transform: translateY(-3px);
+      color: #e63946;
+    }
+    
+    @media (max-width: 768px) {
+      .marquee {
+        height: 60px;
+      }
+      
+      .marquee-item {
+        padding: 0 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="fixed inset-0 bg-lsrp-dark z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div class="loading-spinner mb-4"></div>
+    <h2 class="text-2xl font-orbitron text-white mb-2">LOS SANTOS ROLEPLAY</h2>
+    <p class="text-gray-400 font-inter">Loading immersive experience...</p>
+  </div>
+
+  <!-- Navigation -->
+  <nav id="navbar" class="navbar fixed w-full z-50 py-4 px-6 md:px-12 bg-lsrp-dark/80">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <img src="/Assets/Untitled263_20250227115850-1-1.png" alt="LSRP Logo" class="w-10 h-10 rounded-full">
+        <span class="text-xl font-orbitron font-bold bg-gradient-to-r from-lsrp-red to-red-600 bg-clip-text text-transparent">LOS SANTOS RP</span>
+      </div>
+      
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#home" class="nav-link text-white font-inter font-medium">Home</a>
+        <a href="#features" class="nav-link text-white font-inter font-medium">Features</a>
+        <a href="#departments" class="nav-link text-white font-inter font-medium">Departments</a>
+        <a href="#community" class="nav-link text-white font-inter font-medium">Community</a>
+        <a href="#join" class="nav-link text-white font-inter font-medium">Join Us</a>
+      </div>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuButton" class="md:hidden text-white focus:outline-none">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-lsrp-gray py-4 px-6 shadow-lg">
+      <div class="flex flex-col space-y-4">
+        <a href="#home" class="text-white font-inter">Home</a>
+        <a href="#features" class="text-white font-inter">Features</a>
+        <a href="#departments" class="text-white font-inter">Departments</a>
+        <a href="#community" class="text-white font-inter">Community</a>
+        <a href="#join" class="text-white font-inter">Join Us</a>
+        <div class="pt-4 border-t border-gray-700">
+          <a href="https://discord.gg/dq3AdBYpYc" target="_blank" class="btn-primary inline-block px-6 py-2 rounded-full text-white font-medium text-center">
+            <i class="fab fa-discord mr-2"></i> Join Discord
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="section relative flex items-center justify-center">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center"></div>
+    <div class="hero-gradient absolute inset-0"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-6 md:px-12 py-24 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white">
+        <span class="bg-gradient-to-r from-lsrp-red to-red-600 bg-clip-text text-transparent">LOS SANTOS</span> ROLEPLAY
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10">
+        Experience the most immersive GTA V roleplay community with custom mods, realistic scenarios, and an active player base.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#join" class="btn-primary px-8 py-3 rounded-full text-white font-bold text-lg">
+          <i class="fas fa-user-plus mr-2"></i> Join Now
+        </a>
+        <a href="https://discord.gg/dq3AdBYpYc" target="_blank" class="px-8 py-3 rounded-full bg-white text-lsrp-dark font-bold text-lg hover:bg-gray-200 transition">
+          <i class="fab fa-discord mr-2"></i> Discord
+        </a>
+      </div>
+      
+      <div class="mt-16 flex justify-center">
+        <div class="floating">
+          <i class="fas fa-chevron-down text-3xl text-gray-400 animate-pulse-slow"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="section bg-lsrp-dark py-20">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
+          Why Choose <span class="text-lsrp-red">Los Santos RP</span>?
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          We offer an unparalleled roleplay experience with features designed for immersion and community.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="feature-card p-8 rounded-xl">
+          <div class="text-lsrp-red text-4xl mb-4">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white">Realistic Law Enforcement</h3>
+          <p class="text-gray-400">
+            Experience authentic police procedures with our custom LSPD, BCSO, and SAHP departments featuring realistic training and protocols.
+          </p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="feature-card p-8 rounded-xl">
+          <div class="text-lsrp-red text-4xl mb-4">
+            <i class="fas fa-ambulance"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white">Comprehensive EMS System</h3>
+          <p class="text-gray-400">
+            Our EMS teams operate with realistic medical protocols, equipment, and hospital systems for immersive medical roleplay.
+          </p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="feature-card p-8 rounded-xl">
+          <div class="text-lsrp-red text-4xl mb-4">
+            <i class="fas fa-car-crash"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white">Advanced Vehicle Systems</h3>
+          <p class="text-gray-400">
+            Custom vehicles with realistic handling, damage models, and emergency equipment for all departments.
+          </p>
+        </div>
+        
+        <!-- Feature 4 -->
+        <div class="feature-card p-8 rounded-xl">
+          <div class="text-lsrp-red text-4xl mb-4">
+            <i class="fas fa-gavel"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white">Justice System</h3>
+          <p class="text-gray-400">
+            Complete court system with judges, attorneys, and realistic legal procedures for criminal cases.
+          </p>
+        </div>
+        
+        <!-- Feature 5 -->
+        <div class="feature-card p-8 rounded-xl">
+          <div class="text-lsrp-red text-4xl mb-4">
+            <i class="fas fa-city"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white">Living Economy</h3>
+          <p class="text-gray-400">
+            Dynamic economy system where your actions affect prices, availability of goods, and city development.
+          </p>
+        </div>
+        
+        <!-- Feature 6 -->
+        <div class="feature-card p-8 rounded-xl">
+          <div class="text-lsrp-red text-4xl mb-4">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white">Active Community</h3>
+          <p class="text-gray-400">
+            Join hundreds of active players daily with events, tournaments, and community activities.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Departments Marquee -->
+  <section id="departments" class="marquee">
+    <div class="marquee-content">
+      <div class="marquee-item"><i class="fas fa-police-car department-icon"></i> LOS SANTOS POLICE DEPARTMENT</div>
+      <div class="marquee-item"><i class="fas fa-ambulance department-icon"></i> LOS SANTOS FIRE DEPARTMENT</div>
+      <div class="marquee-item"><i class="fas fa-heartbeat department-icon"></i> LOS SANTOS MEDICAL SERVICES</div>
+      <div class="marquee-item"><i class="fas fa-gavel department-icon"></i> SAN ANDREAS JUDICIAL SYSTEM</div>
+      <div class="marquee-item"><i class="fas fa-car department-icon"></i> DEPARTMENT OF MOTOR VEHICLES</div>
+      <div class="marquee-item"><i class="fas fa-building department-icon"></i> LOS SANTOS GOVERNMENT</div>
+      <div class="marquee-item"><i class="fas fa-newspaper department-icon"></i> LOS SANTOS MEDIA</div>
+      <div class="marquee-item"><i class="fas fa-warehouse department-icon"></i> SAN ANDREAS TRANSPORT</div>
+      
+      <!-- Repeat for seamless loop -->
+      <div class="marquee-item"><i class="fas fa-police-car department-icon"></i> LOS SANTOS POLICE DEPARTMENT</div>
+      <div class="marquee-item"><i class="fas fa-ambulance department-icon"></i> LOS SANTOS FIRE DEPARTMENT</div>
+      <div class="marquee-item"><i class="fas fa-heartbeat department-icon"></i> LOS SANTOS MEDICAL SERVICES</div>
+      <div class="marquee-item"><i class="fas fa-gavel department-icon"></i> SAN ANDREAS JUDICIAL SYSTEM</div>
+      <div class="marquee-item"><i class="fas fa-car department-icon"></i> DEPARTMENT OF MOTOR VEHICLES</div>
+      <div class="marquee-item"><i class="fas fa-building department-icon"></i> LOS SANTOS GOVERNMENT</div>
+      <div class="marquee-item"><i class="fas fa-newspaper department-icon"></i> LOS SANTOS MEDIA</div>
+      <div class="marquee-item"><i class="fas fa-warehouse department-icon"></i> SAN ANDREAS TRANSPORT</div>
+    </div>
+  </section>
+
+  <!-- Community Section -->
+  <section id="community" class="section relative py-20 bg-lsrp-gray">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
+          Our <span class="text-lsrp-red">Community</span>
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          Join thousands of players who make Los Santos RP the most immersive roleplay experience.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h3 class="text-2xl font-bold mb-6 text-white">Active Player Base</h3>
+          <p class="text-gray-400 mb-6">
+            With over 500+ active members, our community is one of the most vibrant GTA V roleplay communities. We have players from all over the world creating stories together.
+          </p>
+          <p class="text-gray-400 mb-8">
+            Our dedicated staff team ensures quality roleplay and organizes regular events to keep the experience fresh and engaging for everyone.
+          </p>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-lsrp-red mb-2">500+</div>
+              <div class="text-sm text-gray-400">Active Members</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-lsrp-red mb-2">24/7</div>
+              <div class="text-sm text-gray-400">Active Server</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-lsrp-red mb-2">50+</div>
+              <div class="text-sm text-gray-400">Custom Vehicles</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-lsrp-red mb-2">100+</div>
+              <div class="text-sm text-gray-400">Custom Scripts</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-lsrp-dark p-6 rounded-xl shadow-lg">
+          <iframe src="https://discord.com/widget?id=1305866007872802876&theme=dark" width="100%" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" class="rounded-lg"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-20 bg-lsrp-dark">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
+          What Our <span class="text-lsrp-red">Community</span> Says
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          Hear from our players about their experiences in Los Santos RP.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Testimonial 1 -->
+        <div class="testimonial-card p-8 rounded-lg">
+          <div class="flex items-center mb-4">
+            <img src="data:image/jpeg;base64,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" alt="Player" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold text-white">John_Doe</h4>
+              <p class="text-sm text-gray-400">LSPD Sergeant</p>
+            </div>
+          </div>
+          <p class="text-gray-300 italic">
+            "The most realistic police roleplay I've experienced. The training and procedures make you feel like a real officer."
+          </p>
+          <div class="mt-4 text-lsrp-red">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+        
+        <!-- Testimonial 2 -->
+        <div class="testimonial-card p-8 rounded-lg">
+          <div class="flex items-center mb-4">
+            <img src="data:image/jpeg;base64,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" alt="Player" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold text-white">Sarah_EMS</h4>
+              <p class="text-sm text-gray-400">EMS Paramedic</p>
+            </div>
+          </div>
+          <p class="text-gray-300 italic">
+            "As a real-life EMT, I'm impressed by the medical system. It's challenging and rewarding to provide care in Los Santos."
+          </p>
+          <div class="mt-4 text-lsrp-red">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+        
+        <!-- Testimonial 3 -->
+        <div class="testimonial-card p-8 rounded-lg">
+          <div class="flex items-center mb-4">
+            <img src="data:image/jpeg;base64,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" alt="Player" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold text-white">Riya_Civ</h4>
+              <p class="text-sm text-gray-400">Business Owner</p>
+            </div>
+          </div>
+          <p class="text-gray-300 italic">
+            "The economy system allows for real business growth. I've built my car dealership from the ground up!"
+          </p>
+          <div class="mt-4 text-lsrp-red">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join Us Section -->
+  <section id="join" class="section relative py-20 bg-gradient-to-br from-lsrp-dark to-lsrp-gray">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">
+        Ready to <span class="text-lsrp-red">Join</span> Los Santos RP?
+      </h2>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-12">
+        Become part of the most immersive Roblox ER:LC roleplay community today.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <!-- Join Discord -->
+        <div class="bg-lsrp-gray p-8 rounded-xl text-left">
+          <div class="text-lsrp-red text-4xl mb-4">
+            <i class="fab fa-discord"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white">Join Our Discord</h3>
+          <p class="text-gray-400 mb-6">
+            Connect with our community, get support, and stay updated on all server news and events.
+          </p>
+          <a href="https://discord.gg/dq3AdBYpYc" target="_blank" class="btn-primary inline-block px-6 py-3 rounded-full text-white font-medium">
+            <i class="fab fa-discord mr-2"></i> Discord Server
+          </a>
+        </div>
+        
+        <!-- Apply Now -->
+        <div class="bg-lsrp-gray p-8 rounded-xl text-left">
+          <div class="text-lsrp-red text-4xl mb-4">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white">Apply Now</h3>
+          <p class="text-gray-400 mb-6">
+            Complete our application form to join Los Santos RP Staff and start your roleplay journey.
+          </p>
+          <a href="#application" class="btn-primary inline-block px-6 py-3 rounded-full text-white font-medium">
+            <i class="fas fa-user-plus mr-2"></i> Apply Today
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Application Form -->
+  <section id="application" class="section py-20 bg-lsrp-dark">
+      <div class="max-w-4xl mx-auto px-6 md:px-12">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
+            <span class="text-lsrp-red">Application</span> Form
+          </h2>
+          <p class="text-gray-400 max-w-2xl mx-auto">
+            Fill out the form below to apply for Los Santos Roleplay.
+          </p>
+        </div>
+        
+        <form id="my-form" action="https://formspree.io/f/xldbnzdo" class="bg-lsrp-gray p-8 rounded-xl shadow-lg" method="POST">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label class="block text-gray-300 text-sm font-medium mb-2">First Name</label>
+              <input type="text" name="FirstName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+            </div>
+            <div>
+              <label class="block text-gray-300 text-sm font-medium mb-2">Last Name</label>
+              <input type="text" name="LastName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+            </div>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-300 text-sm font-medium mb-2">Email Address</label>
+            <input type="email" name="Email" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
+            <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
+            <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-300 text-sm font-medium mb-2">Roleplay Experience</label>
+            <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="RoleplayExperience" placeholder="Describe your previous roleplay experience..." required></textarea>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-300 text-sm font-medium mb-2">Why do you want to join Los Santos RP?</label>
+            <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Joining" required></textarea>
+          </div>
+          
+          <div class="flex items-center mb-6">
+            <input type="checkbox" id="terms" class="rounded focus:ring-lsrp-red text-lsrp-red" required>
+            <label for="terms" class="ml-2 text-sm text-gray-300">
+              I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms of Service</a> and <a href="#" class="text-lsrp-red hover:underline">Community Guidelines</a>
+            </label>
+          </div>
+          
+          <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg">
+            Submit Application
+          </button>
+          <p id="my-form-status" style="display: none;"></p>
+        </form>
+      </div>
+  </section>
+  <!-- Footer -->
+  <footer class="bg-lsrp-gray py-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <!-- About -->
+        <div>
+          <h3 class="text-lg font-bold text-white mb-4">LOS SANTOS  RP</h3>
+          <p class="text-gray-400 mb-4">
+            The most immersive Roblox ER:LC roleplay community featuring realistic scenarios, custom mods, and an active player base.
+          </p>
+          <div class="flex space-x-4">
+            <a href="https://discord.gg/dq3AdBYpYc" class="social-icon text-gray-400 hover:text-lsrp-red text-xl">
+              <i class="fab fa-discord"></i>
+            </a>
+            <a href="#" class="social-icon text-gray-400 hover:text-lsrp-red text-xl">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-icon text-gray-400 hover:text-lsrp-red text-xl">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#" class="social-icon text-gray-400 hover:text-lsrp-red text-xl">
+              <i class="fab fa-twitch"></i>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-bold text-white mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="#home" class="text-gray-400 hover:text-lsrp-red transition">Home</a></li>
+            <li><a href="#features" class="text-gray-400 hover:text-lsrp-red transition">Features</a></li>
+            <li><a href="#departments" class="text-gray-400 hover:text-lsrp-red transition">Departments</a></li>
+            <li><a href="#community" class="text-gray-400 hover:text-lsrp-red transition">Community</a></li>
+            <li><a href="#join" class="text-gray-400 hover:text-lsrp-red transition">Join Us</a></li>
+          </ul>
+        </div>
+        
+        <!-- Departments -->
+        <div>
+          <h3 class="text-lg font-bold text-white mb-4">Departments</h3>
+          <ul class="space-y-2">
+            <li><a href="https://discord.gg/tb6yhYt2pd" class="text-gray-400 hover:text-lsrp-red transition">Los Santos Police Department</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-lsrp-red transition">Sheriff's Office</a></li>
+            <li><a href="https://discord.gg/ggPD77uBKV" class="text-gray-400 hover:text-lsrp-red transition">Los Santos Fire Department</a></li>
+            <li><a href="https://discord.gg/qjRduU65DC" class="text-gray-400 hover:text-lsrp-red transition">Los Santos State Trooper</a></li>
+            <li><a href="https://discord.gg/6ztNBB3Tqf" class="text-gray-400 hover:text-lsrp-red transition">SCP Foundation</a></li>
+            <li><a href="https://discord.gg/PYsb9pF3n2" class="text-gray-400 hover:text-lsrp-red transition">Los Santos Military</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact -->
+        <div>
+          <h3 class="text-lg font-bold text-white mb-4">Contact Us</h3>
+          <ul class="space-y-2">
+            <li class="text-gray-400"><i class="fas fa-envelope mr-2 text-lsrp-red"></i> contact@lossantosrp.com</li>
+            <li class="text-gray-400"><i class="fab fa-discord mr-2 text-lsrp-red"></i> discord.gg/dq3AdBYpYc </li>
+            <li class="text-gray-400"><i class="fas fa-globe mr-2 text-lsrp-red"></i> www.lossantosrp.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+        <p class="text-gray-400">
+          &copy; 2023 Los Santos Roleplay. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Loading screen
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.getElementById('loadingScreen').style.opacity = '0';
+        setTimeout(function() {
+          document.getElementById('loadingScreen').style.display = 'none';
+        }, 500);
+      }, 1500);
+    });
+    
+    // Mobile menu toggle
+    document.getElementById('mobileMenuButton').addEventListener('click', function() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    });
+    
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          // Close mobile menu if open
+          const mobileMenu = document.getElementById('mobileMenu');
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+          }
+          // Scroll to target
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+<script>
+  var form = document.getElementById("my-form");
+  
+  async function handleSubmit(event) {
+    event.preventDefault();
+    var status = document.getElementById("my-form-status");
+    var data = new FormData(event.target);
+    fetch(event.target.action, {
+      method: form.method,
+      body: data,
+      headers: {
+          'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) {
+        status.innerHTML = "Thanks for your submission!";
+        form.reset()
+      } else {
+        response.json().then(data => {
+          if (Object.hasOwn(data, 'errors')) {
+            status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+          } else {
+            status.innerHTML = "Oops! There was a problem submitting your form"
+          }
+        })
+      }
+    }).catch(error => {
+      status.innerHTML = "Oops! There was a problem submitting your form"
+    });
+  }
+  form.addEventListener("submit", handleSubmit)
+</script>
+</body>
+</html>
