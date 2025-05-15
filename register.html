@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - Los Santos RP</title>
+  <link rel="icon" href="/Assets/Untitled263_20250227115850-1-1.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            orbitron: ['Orbitron', 'sans-serif'],
+            inter: ['Inter', 'sans-serif']
+          },
+          colors: {
+            'lsrp-dark': '#0e0e0e',
+            'lsrp-red': '#e63946',
+            'lsrp-blue': '#1d4e89',
+            'lsrp-gold': '#ffd700'
+          },
+          animation: {
+            float: 'float 6s ease-in-out infinite',
+            pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            fadeIn: 'fadeIn 0.5s ease-in-out',
+            shake: 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
+            },
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            shake: {
+              '10%, 90%': { transform: 'translateX(-1px)' },
+              '20%, 80%': { transform: 'translateX(2px)' },
+              '30%, 50%, 70%': { transform: 'translateX(-4px)' },
+              '40%, 60%': { transform: 'translateX(4px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: linear-gradient(135deg, rgba(14, 14, 14, 0.9), rgba(87, 14, 14, 0.9)),
+                  url('https://i.imgur.com/3QXJ1Ww.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .input-field:focus {
+      box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.5);
+      border-color: rgba(230, 57, 70, 0.8);
+    }
+    .glow-text {
+      text-shadow: 0 0 8px rgba(230, 57, 70, 0.7);
+    }
+    .glow-box {
+      box-shadow: 0 0 15px rgba(230, 57, 70, 0.3);
+    }
+    .btn-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(230, 57, 70, 0.3);
+    }
+    .password-strength {
+      height: 4px;
+      transition: all 0.3s ease;
+    }
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: #e63946;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .tooltip {
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .has-tooltip:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .split-container {
+      display: flex;
+      flex-direction: row;
+    }
+    .heading-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+      border-right: 1px solid rgba(29, 78, 137, 0.5);
+    }
+    .form-section {
+      flex: 1;
+      padding: 2rem;
+    }
+    @media (max-width: 768px) {
+      .split-container {
+        flex-direction: column;
+      }
+      .heading-section {
+        border-right: none;
+        border-bottom: 1px solid rgba(29, 78, 137, 0.5);
+        padding-bottom: 1.5rem;
+      }
+      .form-section {
+        padding-top: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body class="font-inter text-white">
+  <!-- Navbar -->
+  <nav class="w-full py-4 px-6 md:px-12 bg-lsrp-dark/80 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <img src="/Assets/Untitled263_20250227115850-1-1.png" alt="LSRP Logo" class="w-10 h-10 rounded-full">
+        <span class="text-xl font-orbitron font-bold bg-gradient-to-r from-lsrp-red to-red-600 bg-clip-text text-transparent">LOS SANTOS RP</span>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="index.html#home" class="nav-link text-white font-inter font-medium">Home</a>
+        <a href="index.html#features" class="nav-link text-white font-inter font-medium">Features</a>
+        <a href="index.html#departments" class="nav-link text-white font-inter font-medium">Departments</a>
+        <a href="index.html#community" class="nav-link text-white font-inter font-medium">Community</a>
+        <a href="index.html#rules" class="nav-link text-white font-inter font-medium">Server Rules</a>
+        <a href="index.html#join" class="nav-link text-white font-inter font-medium">Join Us</a>
+      </div>
+
+      <!-- Right CTA -->
+      <a href="https://discord.gg/dq3AdBYpYc" target="_blank" class="hidden md:inline-flex items-center btn-primary px-6 py-2 rounded-full bg-gradient-to-r from-lsrp-red to-red-700 text-white font-medium text-sm hover:from-red-700 hover:to-lsrp-red transition-all duration-300">
+        <i class="fab fa-discord mr-2"></i> Join Discord
+      </a>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuButton" class="md:hidden text-white focus:outline-none">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-lsrp-dark py-4 px-6 shadow-lg backdrop-blur-sm">
+      <div class="flex flex-col space-y-4">
+        <a href="index.html#home" class="text-white font-inter hover:text-lsrp-red transition">Home</a>
+        <a href="index.html#features" class="text-white font-inter hover:text-lsrp-red transition">Features</a>
+        <a href="index.html#departments" class="text-white font-inter hover:text-lsrp-red transition">Departments</a>
+        <a href="index.html#community" class="text-white font-inter hover:text-lsrp-red transition">Community</a>
+        <a href="index.html#rules" class="text-white font-inter hover:text-lsrp-red transition">Server Rules</a>
+        <a href="index.html#join" class="text-white font-inter hover:text-lsrp-red transition">Join Us</a>
+        <a href="https://discord.gg/dq3AdBYpYc" target="_blank" class="inline-flex items-center justify-center btn-primary px-6 py-2 rounded-full bg-gradient-to-r from-lsrp-red to-red-700 text-white font-medium hover:from-red-700 hover:to-lsrp-red transition">
+          <i class="fab fa-discord mr-2"></i> Join Discord
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="max-w-4xl w-full mx-auto">
+      <!-- Register Form Container -->
+      <div class="bg-lsrp-dark bg-opacity-90 border border-lsrp-blue rounded-xl glow-box backdrop-blur-md relative overflow-hidden animate-fadeIn">
+        <!-- Blurred Background Effects -->
+        <div class="absolute -top-20 -right-20 w-40 h-40 bg-lsrp-red rounded-full filter blur-3xl opacity-20"></div>
+        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-lsrp-blue rounded-full filter blur-3xl opacity-20"></div>
+        <div class="absolute top-1/2 left-1/2 w-60 h-60 bg-lsrp-gold rounded-full filter blur-3xl opacity-10 transform -translate-x-1/2 -translate-y-1/2"></div>
+
+        <!-- Split Container -->
+        <div class="split-container z-10 relative">
+          <!-- Heading Section -->
+          <div class="heading-section">
+            <div class="flex justify-center mb-4">
+              <i class="fas fa-id-card-alt text-lsrp-red text-4xl sm:text-5xl animate-pulse"></i>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-orbitron font-bold glow-text text-center">LOS SANTOS RP</h2>
+            <p class="text-gray-300 text-lg mt-4 text-center">Create your immersive RP account</p>
+            <div class="w-full h-px bg-gradient-to-r from-transparent via-lsrp-red to-transparent my-6 opacity-30"></div>
+            
+            <div class="mt-6 text-center">
+              <p class="text-gray-400 text-sm mb-4">Join our thriving community of roleplayers</p>
+              <ul class="space-y-2 text-gray-300 text-sm">
+                <li class="flex items-center justify-center">
+                  <i class="fas fa-check-circle text-lsrp-red mr-2"></i> 200+ players
+                </li>
+                <li class="flex items-center justify-center">
+                  <i class="fas fa-check-circle text-lsrp-red mr-2"></i> Realistic economy
+                </li>
+                <li class="flex items-center justify-center">
+                  <i class="fas fa-check-circle text-lsrp-red mr-2"></i> Custom scripts
+                </li>
+                <li class="flex items-center justify-center">
+                  <i class="fas fa-check-circle text-lsrp-red mr-2"></i> Active staff
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Form Section -->
+          <div class="form-section">
+            <form id="registerForm" action="#" method="POST" class="space-y-5">
+              <div>
+                <label for="username" class="block text-sm text-gray-300 mb-1 flex items-center">
+                  <i class="fas fa-user mr-2 text-lsrp-red"></i> Username
+                  <div class="has-tooltip ml-1 relative">
+                    <i class="fas fa-info-circle text-xs text-gray-400 cursor-pointer"></i>
+                    <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 bg-lsrp-dark text-xs text-gray-200 p-2 rounded shadow-lg border border-gray-700">
+                      Use your character's full name (e.g. "John_Doe")
+                    </div>
+                  </div>
+                </label>
+                <input type="text" id="username" name="username" required placeholder="Your character name"
+                      class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-5 text-white placeholder-gray-400 border border-gray-700 input-field focus:bg-opacity-10 text-sm transition">
+                <div id="usernameError" class="text-xs text-red-400 mt-1 hidden">Username must be 3-20 characters</div>
+              </div>
+
+              <div>
+                <label for="email" class="block text-sm text-gray-300 mb-1 flex items-center">
+                  <i class="fas fa-envelope mr-2 text-lsrp-red"></i> Email
+                </label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com"
+                      class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-5 text-white placeholder-gray-400 border border-gray-700 input-field focus:bg-opacity-10 text-sm transition">
+                <div id="emailError" class="text-xs text-red-400 mt-1 hidden">Please enter a valid email</div>
+              </div>
+
+              <div>
+                <label for="password" class="block text-sm text-gray-300 mb-1 flex items-center">
+                  <i class="fas fa-lock mr-2 text-lsrp-red"></i> Password
+                  <div class="has-tooltip ml-1 relative">
+                    <i class="fas fa-info-circle text-xs text-gray-400 cursor-pointer"></i>
+                    <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 bg-lsrp-dark text-xs text-gray-200 p-2 rounded shadow-lg border border-gray-700">
+                      Minimum 8 characters with at least 1 number and 1 special character
+                    </div>
+                  </div>
+                </label>
+                <div class="relative">
+                  <input type="password" id="password" name="password" required placeholder="••••••••"
+                        class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-5 text-white placeholder-gray-400 border border-gray-700 input-field focus:bg-opacity-10 text-sm transition pr-10">
+                  <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                    <i class="far fa-eye"></i>
+                  </button>
+                </div>
+                <div id="passwordError" class="text-xs text-red-400 mt-1 hidden">Password must be at least 8 characters</div>
+                <div class="mt-2">
+                  <div class="flex space-x-1 mb-1">
+                    <div id="strength1" class="password-strength w-1/4 bg-gray-600 rounded"></div>
+                    <div id="strength2" class="password-strength w-1/4 bg-gray-600 rounded"></div>
+                    <div id="strength3" class="password-strength w-1/4 bg-gray-600 rounded"></div>
+                    <div id="strength4" class="password-strength w-1/4 bg-gray-600 rounded"></div>
+                  </div>
+                  <div id="passwordStrengthText" class="text-xs text-gray-400">Password strength</div>
+                </div>
+              </div>
+
+              <div>
+                <label for="dob" class="block text-sm text-gray-300 mb-1 flex items-center">
+                  <i class="fas fa-calendar-alt mr-2 text-lsrp-red"></i> Date of Birth
+                </label>
+                <input type="date" id="dob" name="dob" required
+                      class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-5 text-white placeholder-gray-400 border border-gray-700 input-field focus:bg-opacity-10 text-sm transition">
+                <div id="dobError" class="text-xs text-red-400 mt-1 hidden">You must be at least 13 years old</div>
+              </div>
+
+              <div class="flex items-center text-xs text-gray-300">
+                <input type="checkbox" id="terms" class="mr-2 rounded border-gray-600 bg-gray-700 focus:ring-lsrp-red">
+                <label for="terms">I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms</a> and <a href="#" class="text-lsrp-red hover:underline">Guidelines</a></label>
+              </div>
+              <div id="termsError" class="text-xs text-red-400 hidden">You must accept the terms to register</div>
+
+              <button type="submit"
+                    class="w-full py-3 rounded-lg bg-gradient-to-r from-lsrp-red to-red-700 text-white font-semibold btn-hover transition-all duration-300 text-sm sm:text-base flex justify-center items-center hover:from-red-700 hover:to-lsrp-red">
+                <i class="fas fa-user-plus mr-2"></i> Create Account
+              </button>
+
+              <div class="text-center text-xs text-gray-400 pt-2">
+                Already have an account?
+                <a href="login.html" class="text-lsrp-red hover:underline font-medium">Sign In</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+    <div class="bg-lsrp-dark border border-lsrp-blue rounded-xl p-8 max-w-md mx-4 text-center animate-fadeIn">
+      <div class="text-lsrp-red text-5xl mb-4">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3 class="text-xl font-orbitron mb-2">Registration Successful!</h3>
+      <p class="text-gray-300 mb-6">Welcome to Los Santos RP. Check your email to verify your account.</p>
+      <button id="closeModal" class="px-6 py-2 rounded-lg bg-lsrp-red text-white hover:bg-red-700 transition">
+        Continue to Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- JS Validation and Effects -->
+<script>
+  // Auto-redirect if already logged in
+  if (localStorage.getItem('userData')) {
+    window.location.href = 'Dashboard1.html';
+  }
+
+  // Mobile menu toggle
+  document.getElementById('mobileMenuButton').addEventListener('click', function () {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
+
+  // Get DOM elements once
+  const passwordInput = document.getElementById('password');
+  const usernameInput = document.getElementById('username');
+  const emailInput = document.getElementById('email');
+  const dobInput = document.getElementById('dob');
+  const termsInput = document.getElementById('terms');
+  const togglePasswordBtn = document.getElementById('togglePassword');
+
+  // Password toggle
+  togglePasswordBtn.addEventListener('click', function () {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+  });
+
+  // Password strength indicator
+  passwordInput.addEventListener('input', function () {
+    const strengthBars = [
+      document.getElementById('strength1'),
+      document.getElementById('strength2'),
+      document.getElementById('strength3'),
+      document.getElementById('strength4')
+    ];
+    const strengthText = document.getElementById('passwordStrengthText');
+
+    let strength = 0;
+    const value = this.value;
+
+    if (value.length > 0) strength++;
+    if (value.length >= 8) strength++;
+    if (/[A-Z]/.test(value)) strength++;
+    if (/[0-9]/.test(value) && /[^A-Za-z0-9]/.test(value)) strength++;
+
+    strengthBars.forEach((bar, index) => {
+      if (index < strength) {
+        bar.classList.remove('bg-gray-600');
+        if (strength === 1) bar.classList.add('bg-red-500');
+        else if (strength === 2) bar.classList.add('bg-yellow-500');
+        else if (strength >= 3) bar.classList.add('bg-green-500');
+      } else {
+        bar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-green-500');
+        bar.classList.add('bg-gray-600');
+      }
+    });
+
+    if (strength === 0) strengthText.textContent = 'Password strength';
+    else if (strength === 1) strengthText.textContent = 'Weak';
+    else if (strength === 2) strengthText.textContent = 'Medium';
+    else if (strength === 3) strengthText.textContent = 'Strong';
+    else strengthText.textContent = 'Very strong';
+  });
+
+  // Form validation
+  document.getElementById('registerForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    let isValid = true;
+
+    const usernameError = document.getElementById('usernameError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const dobError = document.getElementById('dobError');
+    const termsError = document.getElementById('termsError');
+
+    // Username validation
+    if (usernameInput.value.length < 3 || usernameInput.value.length > 20) {
+      usernameError.classList.remove('hidden');
+      usernameInput.classList.add('animate-shake');
+      isValid = false;
+    } else {
+      usernameError.classList.add('hidden');
+      usernameInput.classList.remove('animate-shake');
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailInput.value)) {
+      emailError.classList.remove('hidden');
+      emailInput.classList.add('animate-shake');
+      isValid = false;
+    } else {
+      emailError.classList.add('hidden');
+      emailInput.classList.remove('animate-shake');
+    }
+
+    // Password validation
+    if (passwordInput.value.length < 8) {
+      passwordError.classList.remove('hidden');
+      passwordInput.classList.add('animate-shake');
+      isValid = false;
+    } else {
+      passwordError.classList.add('hidden');
+      passwordInput.classList.remove('animate-shake');
+    }
+
+    // Date of birth validation
+    if (dobInput.value) {
+      const birthDate = new Date(dobInput.value);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      if (age < 13) {
+        dobError.classList.remove('hidden');
+        dobInput.classList.add('animate-shake');
+        isValid = false;
+      } else {
+        dobError.classList.add('hidden');
+        dobInput.classList.remove('animate-shake');
+      }
+    } else {
+      dobError.classList.remove('hidden');
+      dobInput.classList.add('animate-shake');
+      isValid = false;
+    }
+
+    // Terms validation
+    if (!termsInput.checked) {
+      termsError.classList.remove('hidden');
+      termsInput.classList.add('animate-shake');
+      isValid = false;
+    } else {
+      termsError.classList.add('hidden');
+      termsInput.classList.remove('animate-shake');
+    }
+
+    if (isValid) {
+      // Check if username exists before submitting
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const userExists = users.some(user => user.username === usernameInput.value.trim());
+
+      if (userExists) {
+        usernameError.textContent = 'Username already exists!';
+        usernameError.classList.remove('hidden');
+        usernameInput.classList.add('animate-shake');
+      } else {
+        document.getElementById('successModal').classList.remove('hidden');
+      }
+    }
+  });
+
+  // Final redirect from success modal
+  document.getElementById('closeModal').addEventListener('click', function () {
+    // Create new user object
+    const newUser = {
+      username: usernameInput.value.trim(),
+      fullName: usernameInput.value.trim(),
+      email: emailInput.value.trim(),
+      password: passwordInput.value // Note: In a real app, you should hash this
+    };
+
+    // Save to users list
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    // Set active session
+    localStorage.setItem('userData', JSON.stringify(newUser));
+
+    // Redirect to dashboard
+    window.location.href = 'Dashboard1.html';
+  });
+
+  // Remove shake animation after it ends
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(input => {
+    input.addEventListener('animationend', function () {
+      this.classList.remove('animate-shake');
+    });
+  });
+</script>
+</body>
+</html>

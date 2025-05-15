@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Los Santos RP</title>
+  <link rel="icon" href="/Assets/Untitled263_20250227115850-1-1.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            orbitron: ['Orbitron', 'sans-serif'],
+            inter: ['Inter', 'sans-serif']
+          },
+          colors: {
+            'lsrp-dark': '#0e0e0e',
+            'lsrp-red': '#e63946',
+            'lsrp-blue': '#1d4e89',
+            'lsrp-gold': '#ffd700'
+          },
+          animation: {
+            float: 'float 6s ease-in-out infinite',
+            pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            fadeIn: 'fadeIn 0.5s ease-in-out',
+            shake: 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
+            },
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            shake: {
+              '10%, 90%': { transform: 'translateX(-1px)' },
+              '20%, 80%': { transform: 'translateX(2px)' },
+              '30%, 50%, 70%': { transform: 'translateX(-4px)' },
+              '40%, 60%': { transform: 'translateX(4px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: linear-gradient(135deg, rgba(14, 14, 14, 0.9), rgba(87, 14, 14, 0.9)),
+                  url('https://i.imgur.com/3QXJ1Ww.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .input-field:focus {
+      box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.5);
+      border-color: rgba(230, 57, 70, 0.8);
+    }
+    .glow-text {
+      text-shadow: 0 0 8px rgba(230, 57, 70, 0.7);
+    }
+    .glow-box {
+      box-shadow: 0 0 15px rgba(230, 57, 70, 0.3);
+    }
+    .btn-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(230, 57, 70, 0.3);
+    }
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: #e63946;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .tooltip {
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .has-tooltip:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .split-container {
+      display: flex;
+      flex-direction: row;
+    }
+    .heading-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+      border-right: 1px solid rgba(29, 78, 137, 0.5);
+    }
+    .form-section {
+      flex: 1;
+      padding: 2rem;
+    }
+    @media (max-width: 768px) {
+      .split-container {
+        flex-direction: column;
+      }
+      .heading-section {
+        border-right: none;
+        border-bottom: 1px solid rgba(29, 78, 137, 0.5);
+        padding-bottom: 1.5rem;
+      }
+      .form-section {
+        padding-top: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body class="font-inter text-white">
+  <!-- Navbar -->
+  <nav class="w-full py-4 px-6 md:px-12 bg-lsrp-dark/80 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <img src="/Assets/Untitled263_20250227115850-1-1.png" alt="LSRP Logo" class="w-10 h-10 rounded-full">
+        <span class="text-xl font-orbitron font-bold bg-gradient-to-r from-lsrp-red to-red-600 bg-clip-text text-transparent">LOS SANTOS RP</span>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="index.html#home" class="nav-link text-white font-inter font-medium">Home</a>
+        <a href="index.html#features" class="nav-link text-white font-inter font-medium">Features</a>
+        <a href="index.html#departments" class="nav-link text-white font-inter font-medium">Departments</a>
+        <a href="index.html#community" class="nav-link text-white font-inter font-medium">Community</a>
+        <a href="index.html#rules" class="nav-link text-white font-inter font-medium">Server Rules</a>
+        <a href="index.html#join" class="nav-link text-white font-inter font-medium">Join Us</a>
+      </div>
+
+      <!-- Right CTA -->
+      <a href="https://discord.gg/dq3AdBYpYc" target="_blank" class="hidden md:inline-flex items-center btn-primary px-6 py-2 rounded-full bg-gradient-to-r from-lsrp-red to-red-700 text-white font-medium text-sm hover:from-red-700 hover:to-lsrp-red transition-all duration-300">
+        <i class="fab fa-discord mr-2"></i> Join Discord
+      </a>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuButton" class="md:hidden text-white focus:outline-none">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-lsrp-dark py-4 px-6 shadow-lg backdrop-blur-sm">
+      <div class="flex flex-col space-y-4">
+        <a href="index.html#home" class="text-white font-inter hover:text-lsrp-red transition">Home</a>
+        <a href="index.html#features" class="text-white font-inter hover:text-lsrp-red transition">Features</a>
+        <a href="index.html#departments" class="text-white font-inter hover:text-lsrp-red transition">Departments</a>
+        <a href="index.html#community" class="text-white font-inter hover:text-lsrp-red transition">Community</a>
+        <a href="index.html#rules" class="text-white font-inter hover:text-lsrp-red transition">Server Rules</a>
+        <a href="index.html#join" class="text-white font-inter hover:text-lsrp-red transition">Join Us</a>
+        <a href="https://discord.gg/dq3AdBYpYc" target="_blank" class="inline-flex items-center justify-center btn-primary px-6 py-2 rounded-full bg-gradient-to-r from-lsrp-red to-red-700 text-white font-medium hover:from-red-700 hover:to-lsrp-red transition">
+          <i class="fab fa-discord mr-2"></i> Join Discord
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="max-w-4xl w-full mx-auto">
+      <!-- Login Form Container -->
+      <div class="bg-lsrp-dark bg-opacity-90 border border-lsrp-blue rounded-xl glow-box backdrop-blur-md relative overflow-hidden animate-fadeIn">
+        <!-- Blurred Background Effects -->
+        <div class="absolute -top-20 -right-20 w-40 h-40 bg-lsrp-red rounded-full filter blur-3xl opacity-20"></div>
+        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-lsrp-blue rounded-full filter blur-3xl opacity-20"></div>
+        <div class="absolute top-1/2 left-1/2 w-60 h-60 bg-lsrp-gold rounded-full filter blur-3xl opacity-10 transform -translate-x-1/2 -translate-y-1/2"></div>
+
+        <!-- Split Container -->
+        <div class="split-container z-10 relative">
+          <!-- Heading Section -->
+          <div class="heading-section">
+            <div class="flex justify-center mb-4">
+              <i class="fas fa-sign-in-alt text-lsrp-red text-4xl sm:text-5xl animate-pulse"></i>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-orbitron font-bold glow-text text-center">LOS SANTOS RP</h2>
+            <p class="text-gray-300 text-lg mt-4 text-center">Welcome back to the city</p>
+            <div class="w-full h-px bg-gradient-to-r from-transparent via-lsrp-red to-transparent my-6 opacity-30"></div>
+            
+            <div class="mt-6 text-center">
+              <p class="text-gray-400 text-sm mb-4">Join our thriving community of roleplayers</p>
+              <ul class="space-y-2 text-gray-300 text-sm">
+                <li class="flex items-center justify-center">
+                  <i class="fas fa-check-circle text-lsrp-red mr-2"></i> 200+ players
+                </li>
+                <li class="flex items-center justify-center">
+                  <i class="fas fa-check-circle text-lsrp-red mr-2"></i> Realistic economy
+                </li>
+                <li class="flex items-center justify-center">
+                  <i class="fas fa-check-circle text-lsrp-red mr-2"></i> Custom scripts
+                </li>
+                <li class="flex items-center justify-center">
+                  <i class="fas fa-check-circle text-lsrp-red mr-2"></i> Active staff
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Form Section -->
+          <div class="form-section">
+            <form id="loginForm" action="#" method="POST" class="space-y-5">
+              <div>
+                <label for="loginUsername" class="block text-sm text-gray-300 mb-1 flex items-center">
+                  <i class="fas fa-user mr-2 text-lsrp-red"></i> Username
+                </label>
+                <input type="text" id="loginUsername" name="username" required placeholder="Your character name"
+                      class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-5 text-white placeholder-gray-400 border border-gray-700 input-field focus:bg-opacity-10 text-sm transition">
+                <div id="loginUsernameError" class="text-xs text-red-400 mt-1 hidden">Username is required</div>
+              </div>
+
+              <div>
+                <label for="loginPassword" class="block text-sm text-gray-300 mb-1 flex items-center">
+                  <i class="fas fa-lock mr-2 text-lsrp-red"></i> Password
+                </label>
+                <div class="relative">
+                  <input type="password" id="loginPassword" name="password" required placeholder="••••••••"
+                        class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-5 text-white placeholder-gray-400 border border-gray-700 input-field focus:bg-opacity-10 text-sm transition pr-10">
+                  <button type="button" id="toggleLoginPassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                    <i class="far fa-eye"></i>
+                  </button>
+                </div>
+                <div id="loginPasswordError" class="text-xs text-red-400 mt-1 hidden">Password is required</div>
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-gray-300">
+                <div class="flex items-center">
+                  <input type="checkbox" id="remember" class="mr-2 rounded border-gray-600 bg-gray-700 focus:ring-lsrp-red">
+                  <label for="remember">Remember me</label>
+                </div>
+                <a href="#" class="text-lsrp-red hover:underline">Forgot password?</a>
+              </div>
+
+              <button type="submit"
+                    class="w-full py-3 rounded-lg bg-gradient-to-r from-lsrp-red to-red-700 text-white font-semibold btn-hover transition-all duration-300 text-sm sm:text-base flex justify-center items-center hover:from-red-700 hover:to-lsrp-red">
+                <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+              </button>
+
+              <div class="text-center text-xs text-gray-400 pt-2">
+                Don't have an account?
+                <a href="register.html" class="text-lsrp-red hover:underline font-medium">Register</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="loginSuccessModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+    <div class="bg-lsrp-dark border border-lsrp-blue rounded-xl p-8 max-w-md mx-4 text-center animate-fadeIn">
+      <div class="text-lsrp-red text-5xl mb-4">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3 class="text-xl font-orbitron mb-2">Login Successful!</h3>
+      <p class="text-gray-300 mb-6">Welcome back to Los Santos RP. Redirecting you to your dashboard...</p>
+      <div class="w-full bg-gray-700 rounded-full h-1.5 mb-4">
+        <div id="progressBar" class="bg-lsrp-red h-1.5 rounded-full" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Validation and Effects -->
+<script>
+  // Auto-redirect if already logged in
+  if (localStorage.getItem('userData')) {
+    window.location.href = './dashboard/Dashboard1.html';
+  }
+
+  // Mobile menu toggle
+  document.getElementById('mobileMenuButton').addEventListener('click', function () {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
+
+  // Password toggle
+  const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+  const loginPassword = document.getElementById('loginPassword');
+
+  toggleLoginPassword.addEventListener('click', function () {
+    const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+    loginPassword.setAttribute('type', type);
+    this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+  });
+
+  // Form validation
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    let isValid = true;
+
+    const username = document.getElementById('loginUsername');
+    const password = document.getElementById('loginPassword');
+    const usernameError = document.getElementById('loginUsernameError');
+    const passwordError = document.getElementById('loginPasswordError');
+
+    // Reset errors
+    usernameError.classList.add('hidden');
+    passwordError.classList.add('hidden');
+    username.classList.remove('animate-shake');
+    password.classList.remove('animate-shake');
+
+    // Validate inputs
+    if (username.value.trim() === '') {
+      usernameError.textContent = 'Username is required';
+      usernameError.classList.remove('hidden');
+      username.classList.add('animate-shake');
+      isValid = false;
+    }
+
+    if (password.value.trim() === '') {
+      passwordError.textContent = 'Password is required';
+      passwordError.classList.remove('hidden');
+      password.classList.add('animate-shake');
+      isValid = false;
+    }
+
+    if (isValid) {
+      // Check credentials against stored users
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const foundUser = users.find(user => 
+        user.username === username.value.trim() && 
+        user.password === password.value
+      );
+
+      if (foundUser) {
+        // Show success modal
+        document.getElementById('loginSuccessModal').classList.remove('hidden');
+
+        // Store user data in localStorage
+        localStorage.setItem('userData', JSON.stringify(foundUser));
+
+        // Progress bar animation
+        let width = 0;
+        const progressBar = document.getElementById('progressBar');
+        const interval = setInterval(function () {
+          if (width >= 100) {
+            clearInterval(interval);
+            window.location.href = './dashboard/Dashboard1.html';
+          } else {
+            width += 5;
+            progressBar.style.width = width + '%';
+          }
+        }, 100);
+      } else {
+        // Show error if credentials don't match
+        usernameError.textContent = 'Invalid username or password';
+        passwordError.textContent = 'Invalid username or password';
+        usernameError.classList.remove('hidden');
+        passwordError.classList.remove('hidden');
+        username.classList.add('animate-shake');
+        password.classList.add('animate-shake');
+      }
+    }
+  });
+
+  // Remove shake animation after it ends
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(input => {
+    input.addEventListener('animationend', function () {
+      this.classList.remove('animate-shake');
+    });
+  });
+</script>
+</body>
+</html>
