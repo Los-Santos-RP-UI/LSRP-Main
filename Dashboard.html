@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="icon" href="/Assets/Untitled263_20250227115850-1-1.png" type="image/png">
+    <link rel="icon" href="./Assets/Untitled263_20250227115850-1-1.png" type="image/png">
     <style>
         * {
             margin: 0;
@@ -629,20 +629,20 @@
     </style>
 </head>
 <body>
-    <!-- Authentication Check Container
+    <!-- Authentication Check Container -->
     <div class="auth-container" id="authContainer">
         <h2>Authentication Required</h2>
         <p>You need to login or register to access the dashboard. If you're seeing this message, you may have been logged out or you haven't logged in yet.</p>
         <div class="auth-buttons">
-            <a href="/Authentication/login.html">Login</a>
-            <a href="/Authentication/register.html">Register</a>
-        </div>
-    </div> -->
-
-    <div class="auth-container" id="authContainer">
-        <h2>UNDER DEVELOPMENT.....</h2>
+            <a href="./login.html">Login</a>
+            <a href="./register.html">Register</a>
         </div>
     </div>
+
+    <!-- <div class="auth-container" id="authContainer">
+        <h2>UNDER DEVELOPMENT.....</h2>
+        </div>
+    </div> -->
 
     <!-- Top Navigation Bar -->
     <div class="topbar">
@@ -1384,7 +1384,7 @@
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('userData');
-            window.location.href = '/Authentication/login.html';
+            window.location.href = './login.html';
         });
         
         // Initialize
