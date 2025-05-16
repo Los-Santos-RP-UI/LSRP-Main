@@ -289,7 +289,7 @@
 <script>
   // Auto-redirect if already logged in
   if (localStorage.getItem('userData')) {
-    window.location.href = './dashboard/Dashboard1.html';
+    window.location.href = './Error.html';
   }
 
   // Mobile menu toggle
@@ -360,7 +360,7 @@
         const interval = setInterval(function () {
           if (width >= 100) {
             clearInterval(interval);
-            window.location.href = './dashboard/Dashboard1.html';
+            window.location.href = './Error.html';
           } else {
             width += 5;
             progressBar.style.width = width + '%';
