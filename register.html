@@ -330,7 +330,7 @@
 <script>
   // Auto-redirect if already logged in
   if (localStorage.getItem('userData')) {
-    window.location.href = './Error.html';
+    window.location.href = './Dashboard.html';
   }
 
   // Mobile menu toggle
@@ -500,7 +500,7 @@
     localStorage.setItem('userData', JSON.stringify(newUser));
 
     // Redirect to dashboard
-    window.location.href = 'Dashboard1.html';
+    window.location.href = './Dashboard.html';
   });
 
   // Remove shake animation after it ends
@@ -510,6 +510,7 @@
       this.classList.remove('animate-shake');
     });
   });
+
 </script>
 </body>
 </html>
