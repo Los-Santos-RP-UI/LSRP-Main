@@ -8,6 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -327,190 +329,269 @@
   </div>
 
   <!-- JS Validation and Effects -->
-<script>
-  // Auto-redirect if already logged in
-  if (localStorage.getItem('userData')) {
-    window.location.href = './Dashboard.html';
-  }
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    sendEmailVerification
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-  // Mobile menu toggle
-  document.getElementById('mobileMenuButton').addEventListener('click', function () {
-    document.getElementById('mobileMenu').classList.toggle('hidden');
-  });
+  const firebaseConfig = {
+      apiKey: "AIzaSyCkB5XgzqdgnojBqvMeH9kteHf0i_xVxr0",
+      authDomain: "workflowdashboard-71cf3.firebaseapp.com",
+      projectId: "workflowdashboard-71cf3",
+      storageBucket: "workflowdashboard-71cf3.appspot.com",
+      messagingSenderId: "602480847636",
+      appId: "1:602480847636:web:28f264f19cb585f529f001"
+    };
 
-  // Get DOM elements once
-  const passwordInput = document.getElementById('password');
-  const usernameInput = document.getElementById('username');
-  const emailInput = document.getElementById('email');
-  const dobInput = document.getElementById('dob');
-  const termsInput = document.getElementById('terms');
-  const togglePasswordBtn = document.getElementById('togglePassword');
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-  // Password toggle
-  togglePasswordBtn.addEventListener('click', function () {
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
-  });
+  const form = document.getElementById("registerForm");
+  const modal = document.getElementById("successModal");
+  const closeModalBtn = document.getElementById("closeModal");
 
-  // Password strength indicator
-  passwordInput.addEventListener('input', function () {
-    const strengthBars = [
-      document.getElementById('strength1'),
-      document.getElementById('strength2'),
-      document.getElementById('strength3'),
-      document.getElementById('strength4')
-    ];
-    const strengthText = document.getElementById('passwordStrengthText');
-
-    let strength = 0;
-    const value = this.value;
-
-    if (value.length > 0) strength++;
-    if (value.length >= 8) strength++;
-    if (/[A-Z]/.test(value)) strength++;
-    if (/[0-9]/.test(value) && /[^A-Za-z0-9]/.test(value)) strength++;
-
-    strengthBars.forEach((bar, index) => {
-      if (index < strength) {
-        bar.classList.remove('bg-gray-600');
-        if (strength === 1) bar.classList.add('bg-red-500');
-        else if (strength === 2) bar.classList.add('bg-yellow-500');
-        else if (strength >= 3) bar.classList.add('bg-green-500');
-      } else {
-        bar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-green-500');
-        bar.classList.add('bg-gray-600');
-      }
-    });
-
-    if (strength === 0) strengthText.textContent = 'Password strength';
-    else if (strength === 1) strengthText.textContent = 'Weak';
-    else if (strength === 2) strengthText.textContent = 'Medium';
-    else if (strength === 3) strengthText.textContent = 'Strong';
-    else strengthText.textContent = 'Very strong';
-  });
-
-  // Form validation
-  document.getElementById('registerForm').addEventListener('submit', function (e) {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    let isValid = true;
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-    const usernameError = document.getElementById('usernameError');
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
-    const dobError = document.getElementById('dobError');
-    const termsError = document.getElementById('termsError');
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-    // Username validation
-    if (usernameInput.value.length < 3 || usernameInput.value.length > 20) {
-      usernameError.classList.remove('hidden');
-      usernameInput.classList.add('animate-shake');
-      isValid = false;
-    } else {
-      usernameError.classList.add('hidden');
-      usernameInput.classList.remove('animate-shake');
+      await sendEmailVerification(user);
+
+      // Store user in localStorage for dashboard access
+      localStorage.setItem("userData", JSON.stringify({
+        uid: user.uid,
+        email: user.email,
+        username: username
+      }));
+
+      // Show success modal
+      modal.classList.remove("hidden");
+    } catch (error) {
+      alert("Registration failed: " + error.message);
     }
+  });
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailInput.value)) {
-      emailError.classList.remove('hidden');
-      emailInput.classList.add('animate-shake');
-      isValid = false;
-    } else {
-      emailError.classList.add('hidden');
-      emailInput.classList.remove('animate-shake');
-    }
+  closeModalBtn.addEventListener("click", () => {
+    window.location.href = "Dashboard.html";
+  });
+</script>
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobileMenuButton').addEventListener('click', function () {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
 
-    // Password validation
-    if (passwordInput.value.length < 8) {
-      passwordError.classList.remove('hidden');
-      passwordInput.classList.add('animate-shake');
-      isValid = false;
-    } else {
-      passwordError.classList.add('hidden');
-      passwordInput.classList.remove('animate-shake');
-    }
+    // Get DOM elements once
+    const passwordInput = document.getElementById('password');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const dobInput = document.getElementById('dob');
+    const termsInput = document.getElementById('terms');
+    const togglePasswordBtn = document.getElementById('togglePassword');
 
-    // Date of birth validation
-    if (dobInput.value) {
-      const birthDate = new Date(dobInput.value);
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+    // Password toggle
+    togglePasswordBtn.addEventListener('click', function () {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+    });
+
+    // Password strength indicator
+    passwordInput.addEventListener('input', function () {
+      const strengthBars = [
+        document.getElementById('strength1'),
+        document.getElementById('strength2'),
+        document.getElementById('strength3'),
+        document.getElementById('strength4')
+      ];
+      const strengthText = document.getElementById('passwordStrengthText');
+
+      let strength = 0;
+      const value = this.value;
+
+      if (value.length > 0) strength++;
+      if (value.length >= 8) strength++;
+      if (/[A-Z]/.test(value)) strength++;
+      if (/[0-9]/.test(value) && /[^A-Za-z0-9]/.test(value)) strength++;
+
+      strengthBars.forEach((bar, index) => {
+        if (index < strength) {
+          bar.classList.remove('bg-gray-600');
+          if (strength === 1) bar.classList.add('bg-red-500');
+          else if (strength === 2) bar.classList.add('bg-yellow-500');
+          else if (strength >= 3) bar.classList.add('bg-green-500');
+        } else {
+          bar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-green-500');
+          bar.classList.add('bg-gray-600');
+        }
+      });
+
+      if (strength === 0) strengthText.textContent = 'Password strength';
+      else if (strength === 1) strengthText.textContent = 'Weak';
+      else if (strength === 2) strengthText.textContent = 'Medium';
+      else if (strength === 3) strengthText.textContent = 'Strong';
+      else strengthText.textContent = 'Very strong';
+    });
+
+    // Form validation and Firebase registration
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      let isValid = true;
+
+      const usernameError = document.getElementById('usernameError');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      const dobError = document.getElementById('dobError');
+      const termsError = document.getElementById('termsError');
+
+      // Username validation
+      if (usernameInput.value.length < 3 || usernameInput.value.length > 20) {
+        usernameError.classList.remove('hidden');
+        usernameInput.classList.add('animate-shake');
+        isValid = false;
+      } else {
+        usernameError.classList.add('hidden');
+        usernameInput.classList.remove('animate-shake');
       }
-      if (age < 13) {
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailInput.value)) {
+        emailError.classList.remove('hidden');
+        emailInput.classList.add('animate-shake');
+        isValid = false;
+      } else {
+        emailError.classList.add('hidden');
+        emailInput.classList.remove('animate-shake');
+      }
+
+      // Password validation
+      if (passwordInput.value.length < 8) {
+        passwordError.classList.remove('hidden');
+        passwordInput.classList.add('animate-shake');
+        isValid = false;
+      } else {
+        passwordError.classList.add('hidden');
+        passwordInput.classList.remove('animate-shake');
+      }
+
+      // Date of birth validation
+      if (dobInput.value) {
+        const birthDate = new Date(dobInput.value);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        if (age < 13) {
+          dobError.classList.remove('hidden');
+          dobInput.classList.add('animate-shake');
+          isValid = false;
+        } else {
+          dobError.classList.add('hidden');
+          dobInput.classList.remove('animate-shake');
+        }
+      } else {
         dobError.classList.remove('hidden');
         dobInput.classList.add('animate-shake');
         isValid = false;
-      } else {
-        dobError.classList.add('hidden');
-        dobInput.classList.remove('animate-shake');
       }
-    } else {
-      dobError.classList.remove('hidden');
-      dobInput.classList.add('animate-shake');
-      isValid = false;
-    }
 
-    // Terms validation
-    if (!termsInput.checked) {
-      termsError.classList.remove('hidden');
-      termsInput.classList.add('animate-shake');
-      isValid = false;
-    } else {
-      termsError.classList.add('hidden');
-      termsInput.classList.remove('animate-shake');
-    }
-
-    if (isValid) {
-      // Check if username exists before submitting
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-      const userExists = users.some(user => user.username === usernameInput.value.trim());
-
-      if (userExists) {
-        usernameError.textContent = 'Username already exists!';
-        usernameError.classList.remove('hidden');
-        usernameInput.classList.add('animate-shake');
+      // Terms validation
+      if (!termsInput.checked) {
+        termsError.classList.remove('hidden');
+        termsInput.classList.add('animate-shake');
+        isValid = false;
       } else {
-        document.getElementById('successModal').classList.remove('hidden');
+        termsError.classList.add('hidden');
+        termsInput.classList.remove('animate-shake');
       }
-    }
-  });
 
-  // Final redirect from success modal
-  document.getElementById('closeModal').addEventListener('click', function () {
-    // Create new user object
-    const newUser = {
-      username: usernameInput.value.trim(),
-      fullName: usernameInput.value.trim(),
-      email: emailInput.value.trim(),
-      password: passwordInput.value // Note: In a real app, you should hash this
-    };
-
-    // Save to users list
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-
-    // Set active session
-    localStorage.setItem('userData', JSON.stringify(newUser));
-
-    // Redirect to dashboard
-    window.location.href = './Dashboard.html';
-  });
-
-  // Remove shake animation after it ends
-  const inputs = document.querySelectorAll('input');
-  inputs.forEach(input => {
-    input.addEventListener('animationend', function () {
-      this.classList.remove('animate-shake');
+      if (isValid) {
+        // Firebase registration
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        
+        firebase.createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed up successfully
+            const user = userCredential.user;
+            
+            // Send email verification
+            firebase.sendEmailVerification(user)
+              .then(() => {
+                // Show success modal
+                document.getElementById('successModal').classList.remove('hidden');
+              })
+              .catch((error) => {
+                console.error("Error sending verification email:", error);
+                alert("Account created but failed to send verification email: " + error.message);
+              });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            
+            // Handle specific errors
+            if (errorCode === 'auth/email-already-in-use') {
+              emailError.textContent = 'Email is already in use';
+              emailError.classList.remove('hidden');
+              emailInput.classList.add('animate-shake');
+            } else if (errorCode === 'auth/invalid-email') {
+              emailError.textContent = 'Invalid email address';
+              emailError.classList.remove('hidden');
+              emailInput.classList.add('animate-shake');
+            } else if (errorCode === 'auth/weak-password') {
+              passwordError.textContent = 'Password is too weak';
+              passwordError.classList.remove('hidden');
+              passwordInput.classList.add('animate-shake');
+            } else {
+              alert("Registration error: " + errorMessage);
+            }
+          });
+      }
     });
-  });
 
-</script>
+    // Close modal and redirect
+    document.getElementById('closeModal').addEventListener('click', function () {
+      window.location.href = './Dashboard.html';
+    });
+
+    // Remove shake animation after it ends
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('animationend', function () {
+        this.classList.remove('animate-shake');
+      });
+    });
+  </script>
+  <script>
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+await updateProfile(user, {
+  displayName: username
+});
+
+await sendEmailVerification(user);
+
+// Save to localStorage if you still want
+localStorage.setItem("userData", JSON.stringify({
+  uid: user.uid,
+  email: user.email,
+  username: username
+}));
+  </script>
 </body>
 </html>

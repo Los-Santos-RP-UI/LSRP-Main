@@ -226,7 +226,7 @@
         <a href="#rules" class="nav-link text-white font-inter font-medium">Server Rules</a>
         <a href="#community" class="nav-link text-white font-inter font-medium">Community</a>
         <a href="#join" class="nav-link text-white font-inter font-medium">Join Us</a>
-        <a href="./Dashboard.html" class="nav-link text-white font-inter font-medium">Dashboard</a>
+        <a href="./Error.html" class="nav-link text-white font-inter font-medium">Dashboard</a>
       </div>
       
       <!-- Mobile Menu Button -->
@@ -244,7 +244,7 @@
         <a href="#rules" class="text-white font-inter">Server Rules</a>
         <a href="#community" class="text-white font-inter">Community</a>
         <a href="#join" class="text-white font-inter">Join Us</a>
-        <a href="./Dashboard.html" class="text-white font-inter">Dashboard</a>
+        <a href="./Error.html" class="text-white font-inter">Dashboard</a>
         <div class="pt-4 border-t border-gray-700">
           <a href="https://discord.gg/dq3AdBYpYc" target="_blank" class="btn-primary inline-block px-6 py-2 rounded-full text-white font-medium text-center">
             <i class="fab fa-discord mr-2"></i> Join Discord
@@ -586,55 +586,192 @@
           </p>
         </div>
         
-        <form id="my-form" action="https://formspree.io/f/xldbnzdo" class="bg-lsrp-gray p-8 rounded-xl shadow-lg" method="POST">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label class="block text-gray-300 text-sm font-medium mb-2">First Name</label>
-              <input type="text" name="FirstName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
-            </div>
-            <div>
-              <label class="block text-gray-300 text-sm font-medium mb-2">Last Name</label>
-              <input type="text" name="LastName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
-            </div>
-          </div>
-          
-          <div class="mb-6">
-            <label class="block text-gray-300 text-sm font-medium mb-2">Email Address</label>
-            <input type="email" name="Email" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
-          </div>
-          
-          <div class="mb-6">
-            <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
-            <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
-          </div>
-          
-          <div class="mb-6">
-            <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
-            <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
-          </div>
-          
-          <div class="mb-6">
-            <label class="block text-gray-300 text-sm font-medium mb-2">Roleplay Experience</label>
-            <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="RoleplayExperience" placeholder="Describe your previous roleplay experience..." required></textarea>
-          </div>
-          
-          <div class="mb-6">
-            <label class="block text-gray-300 text-sm font-medium mb-2">Why do you want to join Los Santos RP?</label>
-            <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Joining" required></textarea>
-          </div>
-          
-          <div class="flex items-center mb-6">
-            <input type="checkbox" id="terms" class="rounded focus:ring-lsrp-red text-lsrp-red" required>
-            <label for="terms" class="ml-2 text-sm text-gray-300">
-              I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms of Service</a> and <a href="#" class="text-lsrp-red hover:underline">Community Guidelines</a>
-            </label>
-          </div>
-          
-          <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg">
-            Submit Application
+        <!-- Application Type Selector -->
+        <div class="h-[16.67vh] w-full mb-12 flex flex-col md:flex-row justify-center gap-4">
+          <!-- In-Game Staff Button -->
+          <button id="inGameBtn" class="btn-primary px-8 py-4 rounded-lg text-white font-bold text-lg transition-all duration-300 hover:from-red-700 hover:to-lsrp-red bg-gradient-to-r from-lsrp-red to-red-700" style="height: fit-content;">
+            <i class="fas fa-gamepad mr-2"></i> In-Game Staff
           </button>
-          <p id="my-form-status" style="display: none;"></p>
-        </form>
+          
+          <!-- Discord Staff Button -->
+          <button id="discordBtn" class="btn-primary px-8 py-4 rounded-lg text-white font-bold text-lg transition-all duration-300 hover:from-red-700 hover:to-lsrp-red bg-gradient-to-r from-lsrp-red to-red-700" style="height: fit-content;">
+            <i class="fab fa-discord mr-2"></i> Discord Staff
+          </button>
+          
+          <!-- SHR Button -->
+          <button id="shrBtn" class="btn-primary px-8 py-4 rounded-lg text-white font-bold text-lg transition-all duration-300 hover:from-red-700 hover:to-lsrp-red bg-gradient-to-r from-lsrp-red to-red-700" style="height: fit-content;">
+            <i class="fas fa-shield-alt mr-2"></i> SHR
+          </button>
+        </div>
+        
+        <!-- Discord Staff Form (Default Visible) -->
+        <div id="discordForm" class="application-form bg-lsrp-gray p-8 rounded-xl shadow-lg">
+          <form id="my-form" action="https://formspree.io/f/xldbnzdo" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label class="block text-gray-300 text-sm font-medium mb-2">First Name</label>
+                <input type="text" name="FirstName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              </div>
+              <div>
+                <label class="block text-gray-300 text-sm font-medium mb-2">Last Name</label>
+                <input type="text" name="LastName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              </div>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Email Address</label>
+              <input type="email" name="Email" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
+              <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
+              <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Roleplay Experience</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="RoleplayExperience" placeholder="Describe your previous roleplay experience..." required></textarea>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Why do you want to join Los Santos RP?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Joining" required></textarea>
+            </div>
+            
+            <div class="flex items-center mb-6">
+              <input type="checkbox" id="terms" class="rounded focus:ring-lsrp-red text-lsrp-red" required>
+              <label for="terms" class="ml-2 text-sm text-gray-300">
+                I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms of Service</a> and <a href="#" class="text-lsrp-red hover:underline">Community Guidelines</a>
+              </label>
+            </div>
+            
+            <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg">
+              Submit Application
+            </button>
+            <p id="my-form-status" style="display: none;"></p>
+          </form>
+        </div>
+        
+        <!-- In-Game Staff Form (Hidden by Default) -->
+        <div id="inGameForm" class="application-form bg-lsrp-gray p-8 rounded-xl shadow-lg hidden">
+          <form id="in-game-form" action="https://formspree.io/f/xldbnzdo" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label class="block text-gray-300 text-sm font-medium mb-2">First Name</label>
+                <input type="text" name="FirstName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              </div>
+              <div>
+                <label class="block text-gray-300 text-sm font-medium mb-2">Last Name</label>
+                <input type="text" name="LastName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              </div>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Roblox Username</label>
+              <input type="text" name="RobloxUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
+              <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
+              <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Previous Staff Experience</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="StaffExperience" placeholder="Have you been staff on other servers? Describe your experience..." required></textarea>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Why do you want to be In-Game Staff?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Motivation" required></textarea>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">How would you handle a player breaking rules?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Scenario" required></textarea>
+            </div>
+            
+            <div class="flex items-center mb-6">
+              <input type="checkbox" id="terms-in-game" class="rounded focus:ring-lsrp-red text-lsrp-red" required>
+              <label for="terms-in-game" class="ml-2 text-sm text-gray-300">
+                I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms of Service</a> and <a href="#" class="text-lsrp-red hover:underline">Community Guidelines</a>
+              </label>
+            </div>
+            
+            <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg">
+              Submit Application
+            </button>
+            <p id="in-game-form-status" style="display: none;"></p>
+          </form>
+        </div>
+        
+        <!-- SHR Form (Hidden by Default) -->
+        <div id="shrForm" class="application-form bg-lsrp-gray p-8 rounded-xl shadow-lg hidden">
+          <form id="shr-form" action="https://formspree.io/f/xldbnzdo" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label class="block text-gray-300 text-sm font-medium mb-2">First Name</label>
+                <input type="text" name="FirstName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              </div>
+              <div>
+                <label class="block text-gray-300 text-sm font-medium mb-2">Last Name</label>
+                <input type="text" name="LastName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              </div>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Roblox Username</label>
+              <input type="text" name="RobloxUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
+              <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
+              <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Security/HR Experience</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="SecurityExperience" placeholder="Describe any relevant security or HR experience..." required></textarea>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">Why do you want to join SHR?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Motivation" required></textarea>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">How would you handle a sensitive player report?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Scenario" required></textarea>
+            </div>
+            
+            <div class="flex items-center mb-6">
+              <input type="checkbox" id="terms-shr" class="rounded focus:ring-lsrp-red text-lsrp-red" required>
+              <label for="terms-shr" class="ml-2 text-sm text-gray-300">
+                I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms of Service</a> and <a href="#" class="text-lsrp-red hover:underline">Community Guidelines</a>
+              </label>
+            </div>
+            
+            <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg">
+              Submit Application
+            </button>
+            <p id="shr-form-status" style="display: none;"></p>
+          </form>
+        </div>
       </div>
   </section>
   <!-- Footer -->
@@ -792,6 +929,64 @@
     });
   }
   form.addEventListener("submit", handleSubmit)
+</script>
+<script>
+  // Form switching logic
+  document.addEventListener('DOMContentLoaded', function() {
+    const inGameBtn = document.getElementById('inGameBtn');
+    const discordBtn = document.getElementById('discordBtn');
+    const shrBtn = document.getElementById('shrBtn');
+    
+    const inGameForm = document.getElementById('inGameForm');
+    const discordForm = document.getElementById('discordForm');
+    const shrForm = document.getElementById('shrForm');
+    
+    // Set Discord form as default
+    discordBtn.classList.add('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+    
+    // Button click handlers
+    inGameBtn.addEventListener('click', function() {
+      inGameForm.classList.remove('hidden');
+      discordForm.classList.add('hidden');
+      shrForm.classList.add('hidden');
+      
+      // Update button styles
+      inGameBtn.classList.add('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      discordBtn.classList.remove('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      shrBtn.classList.remove('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      inGameBtn.classList.add('from-lsrp-red', 'to-red-700');
+      discordBtn.classList.add('from-lsrp-red', 'to-red-700');
+      shrBtn.classList.add('from-lsrp-red', 'to-red-700');
+    });
+    
+    discordBtn.addEventListener('click', function() {
+      discordForm.classList.remove('hidden');
+      inGameForm.classList.add('hidden');
+      shrForm.classList.add('hidden');
+      
+      // Update button styles
+      discordBtn.classList.add('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      inGameBtn.classList.remove('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      shrBtn.classList.remove('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      inGameBtn.classList.add('from-lsrp-red', 'to-red-700');
+      discordBtn.classList.add('from-lsrp-red', 'to-red-700');
+      shrBtn.classList.add('from-lsrp-red', 'to-red-700');
+    });
+    
+    shrBtn.addEventListener('click', function() {
+      shrForm.classList.remove('hidden');
+      inGameForm.classList.add('hidden');
+      discordForm.classList.add('hidden');
+      
+      // Update button styles
+      shrBtn.classList.add('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      inGameBtn.classList.remove('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      discordBtn.classList.remove('bg-gradient-to-r', 'from-red-700', 'to-lsrp-red');
+      inGameBtn.classList.add('from-lsrp-red', 'to-red-700');
+      discordBtn.classList.add('from-lsrp-red', 'to-red-700');
+      shrBtn.classList.add('from-lsrp-red', 'to-red-700');
+    });
+  });
 </script>
 </body>
 </html>

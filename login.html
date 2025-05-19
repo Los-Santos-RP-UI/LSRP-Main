@@ -8,6 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -225,26 +227,26 @@
           <div class="form-section">
             <form id="loginForm" action="#" method="POST" class="space-y-5">
               <div>
-                <label for="loginUsername" class="block text-sm text-gray-300 mb-1 flex items-center">
-                  <i class="fas fa-user mr-2 text-lsrp-red"></i> Username
+                <label for="email" class="block text-sm text-gray-300 mb-1 flex items-center">
+                  <i class="fas fa-envelope mr-2 text-lsrp-red"></i> Email
                 </label>
-                <input type="text" id="loginUsername" name="username" required placeholder="Your character name"
+                <input type="email" id="email" name="email" required placeholder="your@email.com"
                       class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-5 text-white placeholder-gray-400 border border-gray-700 input-field focus:bg-opacity-10 text-sm transition">
-                <div id="loginUsernameError" class="text-xs text-red-400 mt-1 hidden">Username is required</div>
+                <div id="emailError" class="text-xs text-red-400 mt-1 hidden">Email is required</div>
               </div>
 
               <div>
-                <label for="loginPassword" class="block text-sm text-gray-300 mb-1 flex items-center">
+                <label for="password" class="block text-sm text-gray-300 mb-1 flex items-center">
                   <i class="fas fa-lock mr-2 text-lsrp-red"></i> Password
                 </label>
                 <div class="relative">
-                  <input type="password" id="loginPassword" name="password" required placeholder="••••••••"
+                  <input type="password" id="password" name="password" required placeholder="••••••••"
                         class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-5 text-white placeholder-gray-400 border border-gray-700 input-field focus:bg-opacity-10 text-sm transition pr-10">
-                  <button type="button" id="toggleLoginPassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                  <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
                     <i class="far fa-eye"></i>
                   </button>
                 </div>
-                <div id="loginPasswordError" class="text-xs text-red-400 mt-1 hidden">Password is required</div>
+                <div id="passwordError" class="text-xs text-red-400 mt-1 hidden">Password is required</div>
               </div>
 
               <div class="flex items-center justify-between text-xs text-gray-300">
@@ -286,78 +288,59 @@
   </div>
 
   <!-- JS Validation and Effects -->
-<script>
-  // Auto-redirect if already logged in
-  if (localStorage.getItem('userData')) {
-    window.location.href = './Dashboard.html';
-  }
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-  // Mobile menu toggle
-  document.getElementById('mobileMenuButton').addEventListener('click', function () {
-    document.getElementById('mobileMenu').classList.toggle('hidden');
-  });
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkB5XgzqdgnojBqvMeH9kteHf0i_xVxr0",
+    authDomain: "workflowdashboard-71cf3.firebaseapp.com",
+    projectId: "workflowdashboard-71cf3",
+    storageBucket: "workflowdashboard-71cf3.appspot.com",
+    messagingSenderId: "602480847636",
+    appId: "1:602480847636:web:28f264f19cb585f529f001"
+  };
 
-  // Password toggle
-  const toggleLoginPassword = document.getElementById('toggleLoginPassword');
-  const loginPassword = document.getElementById('loginPassword');
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-  toggleLoginPassword.addEventListener('click', function () {
-    const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-    loginPassword.setAttribute('type', type);
-    this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
-  });
-
-  // Form validation
+  // Login form handling
   document.getElementById('loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    let isValid = true;
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
 
-    const username = document.getElementById('loginUsername');
-    const password = document.getElementById('loginPassword');
-    const usernameError = document.getElementById('loginUsernameError');
-    const passwordError = document.getElementById('loginPasswordError');
-
-    // Reset errors
-    usernameError.classList.add('hidden');
+    emailError.classList.add('hidden');
     passwordError.classList.add('hidden');
-    username.classList.remove('animate-shake');
-    password.classList.remove('animate-shake');
 
-    // Validate inputs
-    if (username.value.trim() === '') {
-      usernameError.textContent = 'Username is required';
-      usernameError.classList.remove('hidden');
-      username.classList.add('animate-shake');
-      isValid = false;
+    if (!email.value.trim()) {
+      emailError.textContent = 'Email is required';
+      emailError.classList.remove('hidden');
+      return;
     }
 
-    if (password.value.trim() === '') {
+    if (!password.value.trim()) {
       passwordError.textContent = 'Password is required';
       passwordError.classList.remove('hidden');
-      password.classList.add('animate-shake');
-      isValid = false;
+      return;
     }
 
-    if (isValid) {
-      // Check credentials against stored users
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-      const foundUser = users.find(user => 
-        user.username === username.value.trim() && 
-        user.password === password.value
-      );
-
-      if (foundUser) {
-        // Show success modal
+    signInWithEmailAndPassword(auth, email.value, password.value)
+      .then(userCredential => {
+        const user = userCredential.user;
         document.getElementById('loginSuccessModal').classList.remove('hidden');
 
-        // Store user data in localStorage
-        localStorage.setItem('userData', JSON.stringify(foundUser));
-
-        // Progress bar animation
+        // Animate progress bar
         let width = 0;
         const progressBar = document.getElementById('progressBar');
-        const interval = setInterval(function () {
+        const interval = setInterval(() => {
           if (width >= 100) {
             clearInterval(interval);
             window.location.href = './Dashboard.html';
@@ -366,24 +349,40 @@
             progressBar.style.width = width + '%';
           }
         }, 100);
-      } else {
-        // Show error if credentials don't match
-        usernameError.textContent = 'Invalid username or password';
-        passwordError.textContent = 'Invalid username or password';
-        usernameError.classList.remove('hidden');
-        passwordError.classList.remove('hidden');
-        username.classList.add('animate-shake');
-        password.classList.add('animate-shake');
-      }
-    }
+      })
+      .catch(error => {
+        const code = error.code;
+        if (code === 'auth/invalid-email' || code === 'auth/user-not-found') {
+          emailError.textContent = 'Invalid email or account not found';
+          emailError.classList.remove('hidden');
+        } else if (code === 'auth/wrong-password') {
+          passwordError.textContent = 'Incorrect password';
+          passwordError.classList.remove('hidden');
+        } else {
+          passwordError.textContent = 'Login failed: ' + error.message;
+          passwordError.classList.remove('hidden');
+        }
+      });
   });
 
-  // Remove shake animation after it ends
-  const inputs = document.querySelectorAll('input');
-  inputs.forEach(input => {
-    input.addEventListener('animationend', function () {
-      this.classList.remove('animate-shake');
-    });
+  // Redirect already-logged-in users
+   onAuthStateChanged(auth, user => {
+     if (user) {
+       window.location.href = './Dashboard.html';
+     }
+   });
+
+  // Password toggle
+  document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+  });
+
+  // Mobile menu toggle
+  document.getElementById('mobileMenuButton').addEventListener('click', function () {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
   });
 </script>
 </body>

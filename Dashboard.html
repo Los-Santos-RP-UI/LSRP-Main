@@ -779,6 +779,11 @@
                     <span class="sidebar-menu-icon">🔔</span> Notifications
                 </a>
             </li>
+            <li class="sidebar-menu-item">
+            <a href="#" class="sidebar-menu-link" data-section="staff-guide">
+                <span class="sidebar-menu-icon">📘</span> Staff Guide
+            </a>
+            </li>
         </ul>
     </div>
 
@@ -1172,6 +1177,31 @@
             </div>
         </div>
 
+        <!-- Staff Guide Section -->
+        <div class="dashboard-section" id="staff-guide">
+        <h1 class="page-title">Staff Guide</h1>
+
+        <div class="section">
+            <h2 class="section-title">Official Staff Documentation</h2>
+
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid var(--border-color);">
+            <iframe 
+                src="https://docs.google.com/document/d/1QDih7cntTdzQskoKpM6hKE7Zv8pv1D3i32i3-QNAYEE/preview"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                allowfullscreen>
+            </iframe>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+            <a href="https://docs.google.com/document/d/1QDih7cntTdzQskoKpM6hKE7Zv8pv1D3i32i3-QNAYEE/edit?usp=sharing"
+                target="_blank"
+                class="btn btn-outline-primary">
+                View in Google Docs
+            </a>
+            </div>
+        </div>
+        </div>
+
         <!-- Notifications Section -->
         <div class="dashboard-section" id="notifications">
             <h1 class="page-title">Notifications</h1>
@@ -1262,213 +1292,187 @@
         </div>
     </div>
 
-    <script>
-        // DOM Elements
-        const authContainer = document.getElementById('authContainer');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const userDropdown = document.getElementById('userDropdown');
-        const userMenu = document.getElementById('userMenu');
-        const sidebarLinks = document.querySelectorAll('.sidebar-menu-link');
-        const dashboardSections = document.querySelectorAll('.dashboard-section');
-        const dutyToggle = document.getElementById('dutyToggle');
-        const dutyStatusText = document.getElementById('dutyStatusText');
-        const shiftDetails = document.getElementById('shiftDetails');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const userInitials = document.getElementById('userInitials');
-        const profileInitials = document.getElementById('profileInitials');
-        const username = document.getElementById('username');
-        const welcomeUsername = document.getElementById('welcomeUsername');
-        const profileName = document.getElementById('profileName');
-        const profileFullName = document.getElementById('profileFullName');
-        const profileEmail = document.getElementById('profileEmail');
-        const currentStatus = document.getElementById('currentStatus');
-        const shiftStartTime = document.getElementById('shiftStartTime');
-        const shiftDuration = document.getElementById('shiftDuration');
-        
-        // Check Authentication
-        function checkAuth() {
-            // Get user data from localStorage
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            
-            if (userData && userData.username) {
-                // User is logged in
-                authContainer.style.display = 'none';
-                
-                // Set user details across the dashboard
-                const initials = userData.username.charAt(0).toUpperCase();
-                userInitials.textContent = initials;
-                profileInitials.textContent = initials;
-                username.textContent = userData.username;
-                welcomeUsername.textContent = userData.username;
-                profileName.textContent = userData.username;
-                
-                // Set additional profile details if available
-                if (userData.fullName) {
-                    profileFullName.textContent = userData.fullName;
-                }
-                if (userData.email) {
-                    profileEmail.textContent = userData.email;
-                }
-            } else {
-                // User is not logged in
-                authContainer.style.display = 'flex';
-            }
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkB5XgzqdgnojBqvMeH9kteHf0i_xVxr0",
+    authDomain: "workflowdashboard-71cf3.firebaseapp.com",
+    projectId: "workflowdashboard-71cf3",
+    storageBucket: "workflowdashboard-71cf3.appspot.com",
+    messagingSenderId: "602480847636",
+    appId: "1:602480847636:web:28f264f19cb585f529f001"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // DOM Elements
+  const authContainer = document.getElementById('authContainer');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebar = document.getElementById('sidebar');
+  const userDropdown = document.getElementById('userDropdown');
+  const userMenu = document.getElementById('userMenu');
+  const sidebarLinks = document.querySelectorAll('.sidebar-menu-link');
+  const dashboardSections = document.querySelectorAll('.dashboard-section');
+  const dutyToggle = document.getElementById('dutyToggle');
+  const dutyStatusText = document.getElementById('dutyStatusText');
+  const shiftDetails = document.getElementById('shiftDetails');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const userInitials = document.getElementById('userInitials');
+  const profileInitials = document.getElementById('profileInitials');
+  const username = document.getElementById('username');
+  const welcomeUsername = document.getElementById('welcomeUsername');
+  const profileName = document.getElementById('profileName');
+  const profileFullName = document.getElementById('profileFullName');
+  const profileEmail = document.getElementById('profileEmail');
+  const currentStatus = document.getElementById('currentStatus');
+  const shiftStartTime = document.getElementById('shiftStartTime');
+  const shiftDuration = document.getElementById('shiftDuration');
+
+  // Firebase Auth Session Check
+  onAuthStateChanged(auth, (user) => {
+  if (user) {
+    authContainer.style.display = 'none';
+
+    const storedData = JSON.parse(localStorage.getItem('userData'));
+    const displayName = storedData?.username || user.email.split('@')[0];
+
+    const initials = displayName.charAt(0).toUpperCase();
+    userInitials.textContent = initials;
+    profileInitials.textContent = initials;
+    username.textContent = displayName;
+    welcomeUsername.textContent = displayName;
+    profileName.textContent = displayName;
+    profileFullName.textContent = displayName;
+    profileEmail.textContent = user.email;
+  } else {
+    authContainer.style.display = 'flex';
+  }
+});
+
+  // Logout
+  logoutBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    signOut(auth).then(() => {
+      localStorage.removeItem('userData');
+      window.location.href = './login.html';
+    }).catch(error => {
+      alert("Error signing out: " + error.message);
+    });
+  });
+
+  // Sidebar toggle
+  sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('show');
+  });
+
+  // User menu toggle
+  userDropdown.addEventListener('click', () => {
+    userMenu.classList.toggle('show');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!userDropdown.contains(e.target) && !userMenu.contains(e.target)) {
+      userMenu.classList.remove('show');
+    }
+  });
+
+  // Sidebar navigation
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      sidebarLinks.forEach(link => link.classList.remove('active'));
+      link.classList.add('active');
+
+      const sectionId = link.getAttribute('data-section');
+      dashboardSections.forEach(section => {
+        section.classList.remove('active');
+        if (section.id === sectionId) {
+          section.classList.add('active');
         }
-        
-        // Toggle sidebar for mobile
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('show');
+      });
+
+      if (window.innerWidth <= 992) {
+        sidebar.classList.remove('show');
+      }
+    });
+  });
+
+  // Dropdown menu navigation
+  document.querySelectorAll('.dropdown-item').forEach(item => {
+    const sectionId = item.getAttribute('data-section');
+    if (sectionId) {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        dashboardSections.forEach(section => {
+          section.classList.remove('active');
+          if (section.id === sectionId) {
+            section.classList.add('active');
+          }
         });
-        
-        // Toggle user dropdown menu
-        userDropdown.addEventListener('click', () => {
-            userMenu.classList.toggle('show');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!userDropdown.contains(e.target) && !userMenu.contains(e.target)) {
-                userMenu.classList.remove('show');
-            }
-        });
-        
-        // Navigation between dashboard sections
+
         sidebarLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Remove active class from all links
-                sidebarLinks.forEach(link => link.classList.remove('active'));
-                
-                // Add active class to clicked link
-                link.classList.add('active');
-                
-                // Show corresponding section
-                const sectionId = link.getAttribute('data-section');
-                dashboardSections.forEach(section => {
-                    section.classList.remove('active');
-                    if (section.id === sectionId) {
-                        section.classList.add('active');
-                    }
-                });
-                
-                // Hide sidebar on mobile after click
-                if (window.innerWidth <= 992) {
-                    sidebar.classList.remove('show');
-                }
-            });
+          link.classList.remove('active');
+          if (link.getAttribute('data-section') === sectionId) {
+            link.classList.add('active');
+          }
         });
-        
-        // Handle links inside dropdown menu
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            const sectionId = item.getAttribute('data-section');
-            if (sectionId) {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Show corresponding section
-                    dashboardSections.forEach(section => {
-                        section.classList.remove('active');
-                        if (section.id === sectionId) {
-                            section.classList.add('active');
-                        }
-                    });
-                    
-                    // Update active link in sidebar
-                    sidebarLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('data-section') === sectionId) {
-                            link.classList.add('active');
-                        }
-                    });
-                    
-                    // Hide dropdown
-                    userMenu.classList.remove('show');
-                });
-            }
-        });
-        
-        // Toggle duty status
-        let shiftTimer;
-        let startTime;
-        
-        dutyToggle.addEventListener('change', () => {
-            if (dutyToggle.checked) {
-                // On duty
-                dutyStatusText.textContent = 'Currently ON Duty';
-                currentStatus.textContent = 'On Duty';
-                shiftDetails.style.display = 'block';
-                
-                // Set start time
-                startTime = new Date();
-                const formattedDate = startTime.toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    year: 'numeric' 
-                });
-                const formattedTime = startTime.toLocaleTimeString('en-US', { 
-                    hour: 'numeric', 
-                    minute: '2-digit', 
-                    hour12: true 
-                });
-                shiftStartTime.textContent = `${formattedDate} • ${formattedTime}`;
-                
-                // Start timer
-                shiftTimer = setInterval(updateDuration, 1000);
-            } else {
-                // Off duty
-                dutyStatusText.textContent = 'Currently OFF Duty';
-                currentStatus.textContent = 'Off Duty';
-                shiftDetails.style.display = 'none';
-                
-                // Stop timer
-                clearInterval(shiftTimer);
-            }
-        });
-        
-        // Update shift duration
-        function updateDuration() {
-            if (!startTime) return;
-            
-            const now = new Date();
-            const diff = now - startTime;
-            
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-            
-            const formattedHours = String(hours).padStart(2, '0');
-            const formattedMinutes = String(minutes).padStart(2, '0');
-            const formattedSeconds = String(seconds).padStart(2, '0');
-            
-            shiftDuration.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-        }
-        
-        // Handle form submissions
-        document.getElementById('newShiftForm')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Shift request submitted successfully!');
-            e.target.reset();
-        });
-        
-        document.getElementById('newApplicationForm')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Application submitted successfully!');
-            e.target.reset();
-        });
-        
-        // Handle logout
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('userData');
-            window.location.href = './login.html';
-        });
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuth();
-        });
-    </script>
+
+        userMenu.classList.remove('show');
+      });
+    }
+  });
+
+  // Duty toggle logic
+  let shiftTimer;
+  let startTime;
+
+  dutyToggle.addEventListener('change', () => {
+    if (dutyToggle.checked) {
+      dutyStatusText.textContent = 'Currently ON Duty';
+      currentStatus.textContent = 'On Duty';
+      shiftDetails.style.display = 'block';
+
+      startTime = new Date();
+      const formattedDate = startTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const formattedTime = startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      shiftStartTime.textContent = `${formattedDate} • ${formattedTime}`;
+
+      shiftTimer = setInterval(updateDuration, 1000);
+    } else {
+      dutyStatusText.textContent = 'Currently OFF Duty';
+      currentStatus.textContent = 'Off Duty';
+      shiftDetails.style.display = 'none';
+      clearInterval(shiftTimer);
+    }
+  });
+
+  function updateDuration() {
+    if (!startTime) return;
+    const now = new Date();
+    const diff = now - startTime;
+    const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, '0');
+    const minutes = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
+    const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+    shiftDuration.textContent = `${hours}:${minutes}:${seconds}`;
+  }
+
+  // Form submissions
+  document.getElementById('newShiftForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Shift request submitted successfully!');
+    e.target.reset();
+  });
+
+  document.getElementById('newApplicationForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Application submitted successfully!');
+    e.target.reset();
+  });
+
+</script>
 </body>
 </html>
