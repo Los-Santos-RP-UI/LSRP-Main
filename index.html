@@ -609,38 +609,54 @@
           <form id="my-form" action="https://formspree.io/f/xldbnzdo" method="POST">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">First Name</label>
-                <input type="text" name="FirstName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+                <label class="block text-gray-300 text-sm font-medium mb-2">User's Full Name</label>
+                <input type="text" name="FullName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
               </div>
               <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">Last Name</label>
-                <input type="text" name="LastName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+                <label class="block text-gray-300 text-sm font-medium mb-2">User's In-Game Name</label>
+                <input type="text" name="InGameName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
+                <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
+              </div>
+              <div>
+                <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
+                <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
               </div>
             </div>
             
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Email Address</label>
-              <input type="email" name="Email" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              <label class="block text-gray-300 text-sm font-medium mb-2">Time Zone</label>
+              <input type="text" name="TimeZone" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="e.g., EST, PST, GMT+5:30" required>
             </div>
             
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
-              <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
+              <label class="block text-gray-300 text-sm font-medium mb-2">How long have you been playing ERLC? Please detail your journey</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="ERLCExperience" placeholder="Describe your ERLC experience and journey..." required></textarea>
             </div>
             
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
-              <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              <label class="block text-gray-300 text-sm font-medium mb-2">List any roles or responsibilities you have held in other servers (Include specific examples and outcomes)</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="PreviousRoles" placeholder="Describe your previous roles and their outcomes..." required></textarea>
             </div>
             
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Roleplay Experience</label>
-              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="RoleplayExperience" placeholder="Describe your previous roleplay experience..." required></textarea>
+              <label class="block text-gray-300 text-sm font-medium mb-2">Examples of successful events or initiatives you've organized in past servers</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="EventExamples" placeholder="Describe events/initiatives you've organized..." required></textarea>
             </div>
             
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Why do you want to join Los Santos RP?</label>
-              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Joining" required></textarea>
+              <label class="block text-gray-300 text-sm font-medium mb-2">How do you stay updated with the latest updates and changes in ERLC?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="UpdateMethods" placeholder="Explain how you stay informed about ERLC updates..." required></textarea>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">How can you help improve the server? (2+ sentences)</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="ImprovementIdeas" placeholder="Explain how you can contribute to improving the server..." required></textarea>
             </div>
             
             <div class="flex items-center mb-6">
@@ -662,52 +678,72 @@
           <form id="in-game-form" action="https://formspree.io/f/xldbnzdo" method="POST">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">First Name</label>
-                <input type="text" name="FirstName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+                <label class="block text-gray-300 text-sm font-medium mb-2">User's In-Game Name</label>
+                <input type="text" name="InGameName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
               </div>
               <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">Last Name</label>
-                <input type="text" name="LastName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+                <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
+                <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
               </div>
             </div>
-            
+
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Roblox Username</label>
-              <input type="text" name="RobloxUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              <label class="block text-gray-300 text-sm font-medium mb-2">How active will you be? (Hours per day/week)</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-20" name="ActivityLevel" placeholder="e.g., 3 hours daily, 20 hours weekly" required></textarea>
             </div>
-            
+
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
-              <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
+              <label class="block text-gray-300 text-sm font-medium mb-2">Why do you think you are a good fit for the in-game staff team? (3+ sentences)</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="FitForTeam" required></textarea>
             </div>
-            
+
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
-              <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+              <label class="block text-gray-300 text-sm font-medium mb-2">Why should we choose you over other applicants?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="UniqueQualities" required></textarea>
             </div>
-            
+
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Previous Staff Experience</label>
-              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="StaffExperience" placeholder="Have you been staff on other servers? Describe your experience..." required></textarea>
+              <label class="block text-gray-300 text-sm font-medium mb-2">What does VDM stand for? What is an example of VDM? How would you moderate a user who did VDM?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="VDMExplanation" required></textarea>
             </div>
-            
+
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Why do you want to be In-Game Staff?</label>
-              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Motivation" required></textarea>
+              <label class="block text-gray-300 text-sm font-medium mb-2">What does FRP stand for? What is an example of FRP? How would you moderate a user who did FRP?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="FRPExplanation" required></textarea>
             </div>
-            
+
             <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">How would you handle a player breaking rules?</label>
-              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Scenario" required></textarea>
+              <label class="block text-gray-300 text-sm font-medium mb-2">What does RDM stand for? What is an example of RDM? How would you moderate a user who did RDM?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="RDMExplanation" required></textarea>
             </div>
-            
+
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">What does NLR stand for? What is an example of NLR? How would you moderate a user who did NLR?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="NLRExplanation" required></textarea>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">What would you do if you see a moderator or admin abusing?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="AbuseHandling" required></textarea>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">What does LTAP stand for? What is an example of LTAP? How would you moderate a user who did LTAP?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="LTAPExplanation" required></textarea>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-gray-300 text-sm font-medium mb-2">What does Cuff Rush mean? What is an example of Cuff Rushing? How would you moderate a user who did Cuff Rushing?</label>
+              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="CuffRushExplanation" required></textarea>
+            </div>
+
             <div class="flex items-center mb-6">
               <input type="checkbox" id="terms-in-game" class="rounded focus:ring-lsrp-red text-lsrp-red" required>
               <label for="terms-in-game" class="ml-2 text-sm text-gray-300">
                 I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms of Service</a> and <a href="#" class="text-lsrp-red hover:underline">Community Guidelines</a>
               </label>
             </div>
-            
+
             <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg">
               Submit Application
             </button>
@@ -715,63 +751,101 @@
           </form>
         </div>
         
-        <!-- SHR Form (Hidden by Default) -->
-        <div id="shrForm" class="application-form bg-lsrp-gray p-8 rounded-xl shadow-lg hidden">
-          <form id="shr-form" action="https://formspree.io/f/xldbnzdo" method="POST">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">First Name</label>
-                <input type="text" name="FirstName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
-              </div>
-              <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">Last Name</label>
-                <input type="text" name="LastName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
-              </div>
-            </div>
-            
-            <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Roblox Username</label>
-              <input type="text" name="RobloxUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
-            </div>
-            
-            <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
-              <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
-            </div>
-            
-            <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Age</label>
-              <input type="number" min="13" max="99" name="Age" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
-            </div>
-            
-            <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Security/HR Experience</label>
-              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="SecurityExperience" placeholder="Describe any relevant security or HR experience..." required></textarea>
-            </div>
-            
-            <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">Why do you want to join SHR?</label>
-              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Motivation" required></textarea>
-            </div>
-            
-            <div class="mb-6">
-              <label class="block text-gray-300 text-sm font-medium mb-2">How would you handle a sensitive player report?</label>
-              <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="Scenario" required></textarea>
-            </div>
-            
-            <div class="flex items-center mb-6">
-              <input type="checkbox" id="terms-shr" class="rounded focus:ring-lsrp-red text-lsrp-red" required>
-              <label for="terms-shr" class="ml-2 text-sm text-gray-300">
-                I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms of Service</a> and <a href="#" class="text-lsrp-red hover:underline">Community Guidelines</a>
-              </label>
-            </div>
-            
-            <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg">
-              Submit Application
-            </button>
-            <p id="shr-form-status" style="display: none;"></p>
-          </form>
+<!-- SHR Form (Hidden by Default) -->
+<div id="shrForm" class="application-form bg-lsrp-gray p-8 rounded-xl shadow-lg hidden">
+  <form id="shr-form" action="https://formspree.io/f/xldbnzdo" method="POST">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2">In-Game Name</label>
+        <input type="text" name="InGameName" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" required>
+      </div>
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2">Discord Username</label>
+        <input type="text" name="DiscordUsername" class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none" placeholder="username#0000" required>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-gray-300 text-sm font-medium mb-2">Why do you think you are a good fit for the SHR position? (3+ sentences)</label>
+      <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="FitForSHR" required></textarea>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-gray-300 text-sm font-medium mb-2">How active will you be? (Hours per day/week)</label>
+      <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-20" name="ActivityLevel" placeholder="e.g., 3 hours daily, 20 hours weekly" required></textarea>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-gray-300 text-sm font-medium mb-2">How can you help improve our server? (2+ sentences)</label>
+      <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="ImprovementIdeas" required></textarea>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-gray-300 text-sm font-medium mb-2">Why should we choose you over other applicants?</label>
+      <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="UniqueQualities" required></textarea>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-gray-300 text-sm font-medium mb-2">Tell us a little about yourself</label>
+      <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="AboutYou" required></textarea>
+    </div>
+
+    <!-- Rule Knowledge Section -->
+    <div class="mb-6">
+      <h3 class="text-xl font-bold mb-4 text-lsrp-red">Rule Knowledge Assessment</h3>
+      <p class="text-gray-400 mb-6">Please demonstrate your understanding of server rules and how you would handle violations:</p>
+      
+      <div class="space-y-6">
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2">What does VDM stand for? What is an example of VDM? How would you moderate a user who did VDM?</label>
+          <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="VDMExplanation" required></textarea>
         </div>
+
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2">What does FRP stand for? What is an example of FRP? How would you moderate a user who did FRP?</label>
+          <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="FRPExplanation" required></textarea>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2">What does RDM stand for? What is an example of RDM? How would you moderate a user who did RDM?</label>
+          <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="RDMExplanation" required></textarea>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2">What would you do if you see a Moderator or Admin abusing?</label>
+          <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="AbuseHandling" required></textarea>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2">What does NLR stand for? What is an example of NLR? How would you moderate a user who did NLR?</label>
+          <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="NLRExplanation" required></textarea>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2">What does LTAP stand for? What is an example of LTAP? How would you moderate a user who did LTAP?</label>
+          <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="LTAPExplanation" required></textarea>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2">What does Cuff Rush mean? What is an example of Cuff Rushing? How would you moderate a user who did Cuff Rushing?</label>
+          <textarea class="contact-input w-full px-4 py-3 rounded-lg focus:outline-none h-32" name="CuffRushExplanation" required></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center mb-6">
+      <input type="checkbox" id="terms-shr" class="rounded focus:ring-lsrp-red text-lsrp-red" required>
+      <label for="terms-shr" class="ml-2 text-sm text-gray-300">
+        I agree to the <a href="#" class="text-lsrp-red hover:underline">Terms of Service</a> and <a href="#" class="text-lsrp-red hover:underline">Community Guidelines</a>
+      </label>
+    </div>
+
+    <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg">
+      Submit Application
+    </button>
+    <p id="shr-form-status" style="display: none;"></p>
+  </form>
+</div>
       </div>
   </section>
   <!-- Footer -->
