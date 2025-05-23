@@ -8,8 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -52,8 +50,7 @@
   </script>
   <style>
     body {
-      background: linear-gradient(135deg, rgba(14, 14, 14, 0.9), rgba(87, 14, 14, 0.9))
-                  /* url('https://i.imgur.com/3QXJ1Ww.jpg') no-repeat center center fixed; */;
+      background: linear-gradient(135deg, rgba(14, 14, 14, 0.9), rgba(87, 14, 14, 0.9));
       background-size: cover;
       min-height: 100vh;
       display: flex;
@@ -328,85 +325,204 @@
     </div>
   </div>
 
+  <!-- Error Toast -->
+  <div id="errorToast" class="fixed bottom-4 right-4 bg-red-700 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden transform translate-y-10 opacity-0 transition-all duration-300">
+    <div class="flex items-center">
+      <i class="fas fa-exclamation-circle mr-2"></i>
+      <span id="errorMessage"></span>
+    </div>
+  </div>
+
   <!-- JS Validation and Effects -->
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    sendEmailVerification
-  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  const firebaseConfig = {
-      apiKey: "AIzaSyCkB5XgzqdgnojBqvMeH9kteHf0i_xVxr0",
-      authDomain: "workflowdashboard-71cf3.firebaseapp.com",
-      projectId: "workflowdashboard-71cf3",
-      storageBucket: "workflowdashboard-71cf3.appspot.com",
-      messagingSenderId: "602480847636",
-      appId: "1:602480847636:web:28f264f19cb585f529f001"
-    };
+    const supabaseUrl = "https://utruicibsnjfiqcefcpi.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0cnVpY2lic25qZmlxY2VmY3BpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3ODkxNzEsImV4cCI6MjA2MzM2NTE3MX0.ac3ykDbm541imq1Dnyr0iQB23wjFkxHna5CD6hSMPt4";
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    // DOM Elements
+    const registerForm = document.getElementById('registerForm');
+    const successModal = document.getElementById('successModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const errorToast = document.getElementById('errorToast');
+    const errorMessage = document.getElementById('errorMessage');
 
-  const form = document.getElementById("registerForm");
-  const modal = document.getElementById("successModal");
-  const closeModalBtn = document.getElementById("closeModal");
+    // Show error toast
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorToast.classList.remove('hidden');
+      setTimeout(() => {
+        errorToast.classList.remove('translate-y-10', 'opacity-0');
+        errorToast.classList.add('translate-y-0', 'opacity-100');
+      }, 10);
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const username = document.getElementById("username").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      await sendEmailVerification(user);
-
-      // Store user in localStorage for dashboard access
-      localStorage.setItem("userData", JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-        username: username
-      }));
-
-      // Show success modal
-      modal.classList.remove("hidden");
-    } catch (error) {
-      alert("Registration failed: " + error.message);
+      setTimeout(() => {
+        errorToast.classList.add('translate-y-10', 'opacity-0');
+        setTimeout(() => errorToast.classList.add('hidden'), 300);
+      }, 5000);
     }
-  });
 
-  closeModalBtn.addEventListener("click", () => {
-    window.location.href = "Dashboard.html";
-  });
-</script>
-  <script>
-    // Mobile menu toggle
-    document.getElementById('mobileMenuButton').addEventListener('click', function () {
-      document.getElementById('mobileMenu').classList.toggle('hidden');
+    // Check if user is already logged in
+    async function checkAuth() {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      
+      if (user) {
+        // User is already logged in, redirect to dashboard
+        window.location.href = 'Dashboard.html';
+      }
+    }
+
+    // Handle registration form submission
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const dob = document.getElementById('dob').value;
+      const terms = document.getElementById('terms').checked;
+
+      // Validate inputs
+      if (!validateForm(username, email, password, dob, terms)) {
+        return;
+      }
+
+      try {
+        // Register user with Supabase Auth
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              username: username,
+              dob: dob
+            }
+          }
+        });
+
+        if (authError) throw authError;
+
+        // Store additional user data in profiles table
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            { 
+              id: authData.user.id,
+              username: username,
+              email: email,
+              dob: dob,
+              created_at: new Date().toISOString()
+            }
+          ]);
+
+        if (profileError) throw profileError;
+
+        // Show success modal
+        successModal.classList.remove('hidden');
+
+      } catch (error) {
+        console.error('Registration error:', error);
+        showError(error.message || 'Registration failed. Please try again.');
+      }
     });
 
-    // Get DOM elements once
-    const passwordInput = document.getElementById('password');
-    const usernameInput = document.getElementById('username');
-    const emailInput = document.getElementById('email');
-    const dobInput = document.getElementById('dob');
-    const termsInput = document.getElementById('terms');
-    const togglePasswordBtn = document.getElementById('togglePassword');
+    // Form validation
+    function validateForm(username, email, password, dob, terms) {
+      let isValid = true;
+
+      // Username validation
+      const usernameError = document.getElementById('usernameError');
+      if (username.length < 3 || username.length > 20) {
+        usernameError.classList.remove('hidden');
+        document.getElementById('username').classList.add('animate-shake');
+        isValid = false;
+      } else {
+        usernameError.classList.add('hidden');
+        document.getElementById('username').classList.remove('animate-shake');
+      }
+
+      // Email validation
+      const emailError = document.getElementById('emailError');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        emailError.classList.remove('hidden');
+        document.getElementById('email').classList.add('animate-shake');
+        isValid = false;
+      } else {
+        emailError.classList.add('hidden');
+        document.getElementById('email').classList.remove('animate-shake');
+      }
+
+      // Password validation
+      const passwordError = document.getElementById('passwordError');
+      if (password.length < 8) {
+        passwordError.classList.remove('hidden');
+        document.getElementById('password').classList.add('animate-shake');
+        isValid = false;
+      } else {
+        passwordError.classList.add('hidden');
+        document.getElementById('password').classList.remove('animate-shake');
+      }
+
+      // Date of birth validation
+      const dobError = document.getElementById('dobError');
+      if (dob) {
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        if (age < 13) {
+          dobError.classList.remove('hidden');
+          document.getElementById('dob').classList.add('animate-shake');
+          isValid = false;
+        } else {
+          dobError.classList.add('hidden');
+          document.getElementById('dob').classList.remove('animate-shake');
+        }
+      } else {
+        dobError.classList.remove('hidden');
+        document.getElementById('dob').classList.add('animate-shake');
+        isValid = false;
+      }
+
+      // Terms validation
+      const termsError = document.getElementById('termsError');
+      if (!terms) {
+        termsError.classList.remove('hidden');
+        document.getElementById('terms').classList.add('animate-shake');
+        isValid = false;
+      } else {
+        termsError.classList.add('hidden');
+        document.getElementById('terms').classList.remove('animate-shake');
+      }
+
+      return isValid;
+    }
+
+    // Close modal and redirect
+    closeModalBtn.addEventListener('click', () => {
+      window.location.href = 'Dashboard.html';
+    });
 
     // Password toggle
-    togglePasswordBtn.addEventListener('click', function () {
+    document.getElementById('togglePassword').addEventListener('click', function () {
+      const passwordInput = document.getElementById('password');
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordInput.setAttribute('type', type);
       this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
     });
 
+    // Mobile menu toggle
+    document.getElementById('mobileMenuButton').addEventListener('click', function () {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
     // Password strength indicator
-    passwordInput.addEventListener('input', function () {
+    document.getElementById('password').addEventListener('input', function () {
       const strengthBars = [
         document.getElementById('strength1'),
         document.getElementById('strength2'),
@@ -442,132 +558,6 @@
       else strengthText.textContent = 'Very strong';
     });
 
-    // Form validation and Firebase registration
-    document.getElementById('registerForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      let isValid = true;
-
-      const usernameError = document.getElementById('usernameError');
-      const emailError = document.getElementById('emailError');
-      const passwordError = document.getElementById('passwordError');
-      const dobError = document.getElementById('dobError');
-      const termsError = document.getElementById('termsError');
-
-      // Username validation
-      if (usernameInput.value.length < 3 || usernameInput.value.length > 20) {
-        usernameError.classList.remove('hidden');
-        usernameInput.classList.add('animate-shake');
-        isValid = false;
-      } else {
-        usernameError.classList.add('hidden');
-        usernameInput.classList.remove('animate-shake');
-      }
-
-      // Email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(emailInput.value)) {
-        emailError.classList.remove('hidden');
-        emailInput.classList.add('animate-shake');
-        isValid = false;
-      } else {
-        emailError.classList.add('hidden');
-        emailInput.classList.remove('animate-shake');
-      }
-
-      // Password validation
-      if (passwordInput.value.length < 8) {
-        passwordError.classList.remove('hidden');
-        passwordInput.classList.add('animate-shake');
-        isValid = false;
-      } else {
-        passwordError.classList.add('hidden');
-        passwordInput.classList.remove('animate-shake');
-      }
-
-      // Date of birth validation
-      if (dobInput.value) {
-        const birthDate = new Date(dobInput.value);
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
-        }
-        if (age < 13) {
-          dobError.classList.remove('hidden');
-          dobInput.classList.add('animate-shake');
-          isValid = false;
-        } else {
-          dobError.classList.add('hidden');
-          dobInput.classList.remove('animate-shake');
-        }
-      } else {
-        dobError.classList.remove('hidden');
-        dobInput.classList.add('animate-shake');
-        isValid = false;
-      }
-
-      // Terms validation
-      if (!termsInput.checked) {
-        termsError.classList.remove('hidden');
-        termsInput.classList.add('animate-shake');
-        isValid = false;
-      } else {
-        termsError.classList.add('hidden');
-        termsInput.classList.remove('animate-shake');
-      }
-
-      if (isValid) {
-        // Firebase registration
-        const email = emailInput.value;
-        const password = passwordInput.value;
-        
-        firebase.createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-            // Signed up successfully
-            const user = userCredential.user;
-            
-            // Send email verification
-            firebase.sendEmailVerification(user)
-              .then(() => {
-                // Show success modal
-                document.getElementById('successModal').classList.remove('hidden');
-              })
-              .catch((error) => {
-                console.error("Error sending verification email:", error);
-                alert("Account created but failed to send verification email: " + error.message);
-              });
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            
-            // Handle specific errors
-            if (errorCode === 'auth/email-already-in-use') {
-              emailError.textContent = 'Email is already in use';
-              emailError.classList.remove('hidden');
-              emailInput.classList.add('animate-shake');
-            } else if (errorCode === 'auth/invalid-email') {
-              emailError.textContent = 'Invalid email address';
-              emailError.classList.remove('hidden');
-              emailInput.classList.add('animate-shake');
-            } else if (errorCode === 'auth/weak-password') {
-              passwordError.textContent = 'Password is too weak';
-              passwordError.classList.remove('hidden');
-              passwordInput.classList.add('animate-shake');
-            } else {
-              alert("Registration error: " + errorMessage);
-            }
-          });
-      }
-    });
-
-    // Close modal and redirect
-    document.getElementById('closeModal').addEventListener('click', function () {
-      window.location.href = './Dashboard.html';
-    });
-
     // Remove shake animation after it ends
     const inputs = document.querySelectorAll('input');
     inputs.forEach(input => {
@@ -575,23 +565,9 @@
         this.classList.remove('animate-shake');
       });
     });
-  </script>
-  <script>
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
 
-await updateProfile(user, {
-  displayName: username
-});
-
-await sendEmailVerification(user);
-
-// Save to localStorage if you still want
-localStorage.setItem("userData", JSON.stringify({
-  uid: user.uid,
-  email: user.email,
-  username: username
-}));
+    // Check auth state on page load
+    checkAuth();
   </script>
 </body>
 </html>

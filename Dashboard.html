@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="icon" href="./Assets/Untitled263_20250227115850-1-1.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -486,6 +487,42 @@
             color: var(--text-primary);
         }
 
+        /* Profile Avatar Container */
+        .profile-avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        /* Profile Sections */
+        .profile-section {
+            margin-bottom: 30px;
+        }
+
+        /* Avatar styles */
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Form styles specific to profile */
+        #editProfileForm .form-group,
+        #changePasswordForm .form-group {
+            margin-bottom: 15px;
+        }
+
         /* Applications Section */
         .application-card {
             background-color: rgba(30, 30, 30, 0.7);
@@ -704,6 +741,82 @@
         .notification-item p {
             margin-bottom: 0;
         }
+        /* Profile Avatar Container */
+        .profile-avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        /* Profile Sections */
+        .profile-section {
+            margin-bottom: 30px;
+        }
+
+        /* Avatar styles */
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid var(--primary-color);
+        }
+
+        /* Form styles specific to profile */
+        #editProfileForm .form-group,
+        #changePasswordForm .form-group {
+            margin-bottom: 15px;
+        }
+
+        .avatar-upload-status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-align: center;
+            min-height: 20px;
+        }
+
+        /* Loading spinners */
+        .btn-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .profile-sidebar {
+                width: 100%;
+            }
+            
+            .profile-details {
+                width: 100%;
+            }
+            
+            .profile-stats {
+                justify-content: space-between;
+            }
+        }
     </style>
 </head>
 <body>
@@ -716,11 +829,6 @@
             <a href="./register.html">Register</a>
         </div>
     </div> 
-
-    <!-- <div class="auth-container" id="authContainer">
-        <h2>UNDER DEVELOPMENT.....</h2>
-        </div>
-    </div> -->
 
     <!-- Top Navigation Bar -->
     <div class="topbar">
@@ -1011,37 +1119,52 @@
                 </form>
             </div>
         </div>
-
-        <!-- Profile Section -->
+        <!-- Profile -->
         <div class="dashboard-section" id="profile">
-            <h1 class="page-title">User Profile</h1>
-            
-            <div class="section">
-                <div class="profile-container">
-                    <div class="profile-sidebar">
+        <h1 class="page-title">User Profile</h1>
+        
+        <div class="section">
+            <div class="profile-container">
+                <div class="profile-sidebar">
+                    <div class="profile-avatar-container">
                         <div class="profile-avatar" id="profileInitials">U</div>
-                        <h2 class="profile-name" id="profileName">Username</h2>
-                        <p class="profile-position">Employee</p>
-                        
-                        <div class="profile-stats">
-                            <div class="stat-item">
-                                <div class="stat-value">24</div>
-                                <div class="stat-label">Shifts</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">186</div>
-                                <div class="stat-label">Hours</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">5</div>
-                                <div class="stat-label">Years</div>
-                            </div>
+                        <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                        <button class="btn btn-outline-primary" id="changeAvatarBtn" style="margin-top: 10px; width: 100%;">
+                            Change Photo
+                        </button>
+                        <div class="avatar-upload-status" id="avatarUploadStatus"></div>
+                    </div>
+                    <h2 class="profile-name" id="profileName">Username</h2>
+                    <p class="profile-position" id="profilePosition">Employee</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalShifts">24</div>
+                            <div class="stat-label">Shifts</div>
                         </div>
-                        
-                        <button class="btn btn-outline-primary" style="width: 100%;">Edit Profile</button>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalHours">186</div>
+                            <div class="stat-label">Hours</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="yearsWorked">5</div>
+                            <div class="stat-label">Years</div>
+                        </div>
                     </div>
                     
-                    <div class="profile-details">
+                    <div style="width: 100%; margin-top: 20px;">
+                        <button class="btn btn-outline-primary" style="width: 100%; margin-bottom: 10px;" id="editProfileBtn">
+                            Edit Profile
+                        </button>
+                        <button class="btn btn-danger" style="width: 100%;" id="deleteAccountBtn">
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="profile-details">
+                    <!-- Personal Information Section -->
+                    <div class="profile-section" id="personalInfoSection">
                         <h3 style="margin-bottom: 20px;">Personal Information</h3>
                         
                         <div class="detail-item">
@@ -1056,35 +1179,126 @@
                         
                         <div class="detail-item">
                             <div class="detail-label">Phone:</div>
-                            <div class="detail-value">+1 (555) 123-4567</div>
+                            <div class="detail-value" id="profilePhone">+1 (555) 123-4567</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">Address:</div>
+                            <div class="detail-value" id="profileAddress">123 Main St, City, Country</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">Emergency Contact:</div>
+                            <div class="detail-value" id="profileEmergencyContact">Jane Doe (Spouse) - +1 (555) 987-6543</div>
                         </div>
                         
                         <div class="detail-item">
                             <div class="detail-label">Department:</div>
-                            <div class="detail-value">Operations</div>
+                            <div class="detail-value" id="profileDepartment">Operations</div>
                         </div>
                         
                         <div class="detail-item">
                             <div class="detail-label">Position:</div>
-                            <div class="detail-value">Shift Manager</div>
+                            <div class="detail-value" id="profilePositionDisplay">Shift Manager</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">Employee ID:</div>
+                            <div class="detail-value" id="profileEmployeeId">EMP-2020-001</div>
                         </div>
                         
                         <div class="detail-item">
                             <div class="detail-label">Joined:</div>
-                            <div class="detail-value">May 14, 2020</div>
+                            <div class="detail-value" id="profileJoinDate">May 14, 2020</div>
                         </div>
+                    </div>
+                    
+                    <!-- Edit Profile Form (Hidden by default) -->
+                    <div class="profile-section" id="editProfileSection" style="display: none;">
+                        <h3 style="margin-bottom: 20px;">Edit Profile</h3>
                         
-                        <h3 style="margin: 30px 0 20px;">Account Settings</h3>
+                        <form id="editProfileForm">
+                            <div class="form-group">
+                                <label class="form-label" for="editFullName">Full Name</label>
+                                <input type="text" id="editFullName" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="editPhone">Phone Number</label>
+                                <input type="tel" id="editPhone" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="editAddress">Address</label>
+                                <textarea id="editAddress" class="form-control" rows="2"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="editEmergencyContact">Emergency Contact</label>
+                                <input type="text" id="editEmergencyContact" class="form-control">
+                            </div>
+                            
+                            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary" id="saveProfileBtn">
+                                    <span id="saveProfileText">Save Changes</span>
+                                    <span id="saveProfileSpinner" style="display: none;">Saving...</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" id="cancelEditBtn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Change Password Form (Hidden by default) -->
+                    <div class="profile-section" id="changePasswordSection" style="display: none;">
+                        <h3 style="margin-bottom: 20px;">Change Password</h3>
                         
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                            <button class="btn btn-outline-primary">Change Password</button>
-                            <button class="btn btn-outline-primary">Notification Settings</button>
-                            <button class="btn btn-danger">Delete Account</button>
+                        <form id="changePasswordForm">
+                            <div class="form-group">
+                                <label class="form-label" for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" class="form-control" required minlength="6">
+                                <small class="text-muted">Minimum 6 characters</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" class="form-control" required>
+                            </div>
+                            
+                            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary" id="savePasswordBtn">
+                                    <span id="savePasswordText">Update Password</span>
+                                    <span id="savePasswordSpinner" style="display: none;">Updating...</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" id="cancelPasswordBtn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Account Settings Section -->
+                    <div class="profile-section" style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 20px;">Account Settings</h3>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <button class="btn btn-outline-primary" id="showPasswordFormBtn">
+                                Change Password
+                            </button>
+                            <button class="btn btn-outline-primary" id="notificationSettingsBtn">
+                                Notification Settings
+                            </button>
+                            <button class="btn btn-outline-primary" id="twoFactorAuthBtn">
+                                Two-Factor Auth
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
         <!-- Applications Section -->
         <div class="dashboard-section" id="applications">
@@ -1292,187 +1506,612 @@
         </div>
     </div>
 
+    <!-- Error Toast -->
+    <div id="errorToast" class="fixed bottom-4 right-4 bg-red-700 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden transform translate-y-10 opacity-0 transition-all duration-300">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span id="errorMessage"></span>
+        </div>
+    </div>
+
+    <!-- JS Implementation with Supabase -->
     <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCkB5XgzqdgnojBqvMeH9kteHf0i_xVxr0",
-    authDomain: "workflowdashboard-71cf3.firebaseapp.com",
-    projectId: "workflowdashboard-71cf3",
-    storageBucket: "workflowdashboard-71cf3.appspot.com",
-    messagingSenderId: "602480847636",
-    appId: "1:602480847636:web:28f264f19cb585f529f001"
-  };
+        const supabaseUrl = "https://utruicibsnjfiqcefcpi.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0cnVpY2lic25qZmlxY2VmY3BpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3ODkxNzEsImV4cCI6MjA2MzM2NTE3MX0.ac3ykDbm541imq1Dnyr0iQB23wjFkxHna5CD6hSMPt4";
+        const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+        // DOM Elements
+        const authContainer = document.getElementById('authContainer');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const userDropdown = document.getElementById('userDropdown');
+        const userMenu = document.getElementById('userMenu');
+        const sidebarLinks = document.querySelectorAll('.sidebar-menu-link');
+        const dashboardSections = document.querySelectorAll('.dashboard-section');
+        const dutyToggle = document.getElementById('dutyToggle');
+        const dutyStatusText = document.getElementById('dutyStatusText');
+        const shiftDetails = document.getElementById('shiftDetails');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userInitials = document.getElementById('userInitials');
+        const profileInitials = document.getElementById('profileInitials');
+        const username = document.getElementById('username');
+        const welcomeUsername = document.getElementById('welcomeUsername');
+        const profileName = document.getElementById('profileName');
+        const profileFullName = document.getElementById('profileFullName');
+        const profileEmail = document.getElementById('profileEmail');
+        const currentStatus = document.getElementById('currentStatus');
+        const shiftStartTime = document.getElementById('shiftStartTime');
+        const shiftDuration = document.getElementById('shiftDuration');
+        const errorToast = document.getElementById('errorToast');
+        const errorMessage = document.getElementById('errorMessage');
 
-  // DOM Elements
-  const authContainer = document.getElementById('authContainer');
-  const sidebarToggle = document.getElementById('sidebarToggle');
-  const sidebar = document.getElementById('sidebar');
-  const userDropdown = document.getElementById('userDropdown');
-  const userMenu = document.getElementById('userMenu');
-  const sidebarLinks = document.querySelectorAll('.sidebar-menu-link');
-  const dashboardSections = document.querySelectorAll('.dashboard-section');
-  const dutyToggle = document.getElementById('dutyToggle');
-  const dutyStatusText = document.getElementById('dutyStatusText');
-  const shiftDetails = document.getElementById('shiftDetails');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const userInitials = document.getElementById('userInitials');
-  const profileInitials = document.getElementById('profileInitials');
-  const username = document.getElementById('username');
-  const welcomeUsername = document.getElementById('welcomeUsername');
-  const profileName = document.getElementById('profileName');
-  const profileFullName = document.getElementById('profileFullName');
-  const profileEmail = document.getElementById('profileEmail');
-  const currentStatus = document.getElementById('currentStatus');
-  const shiftStartTime = document.getElementById('shiftStartTime');
-  const shiftDuration = document.getElementById('shiftDuration');
+        // Show error toast
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorToast.classList.remove('hidden');
+            setTimeout(() => {
+                errorToast.classList.remove('translate-y-10', 'opacity-0');
+                errorToast.classList.add('translate-y-0', 'opacity-100');
+            }, 10);
 
-  // Firebase Auth Session Check
-  onAuthStateChanged(auth, (user) => {
-  if (user) {
-    authContainer.style.display = 'none';
-
-    const storedData = JSON.parse(localStorage.getItem('userData'));
-    const displayName = storedData?.username || user.email.split('@')[0];
-
-    const initials = displayName.charAt(0).toUpperCase();
-    userInitials.textContent = initials;
-    profileInitials.textContent = initials;
-    username.textContent = displayName;
-    welcomeUsername.textContent = displayName;
-    profileName.textContent = displayName;
-    profileFullName.textContent = displayName;
-    profileEmail.textContent = user.email;
-  } else {
-    authContainer.style.display = 'flex';
-  }
-});
-
-  // Logout
-  logoutBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    signOut(auth).then(() => {
-      localStorage.removeItem('userData');
-      window.location.href = './login.html';
-    }).catch(error => {
-      alert("Error signing out: " + error.message);
-    });
-  });
-
-  // Sidebar toggle
-  sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('show');
-  });
-
-  // User menu toggle
-  userDropdown.addEventListener('click', () => {
-    userMenu.classList.toggle('show');
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!userDropdown.contains(e.target) && !userMenu.contains(e.target)) {
-      userMenu.classList.remove('show');
-    }
-  });
-
-  // Sidebar navigation
-  sidebarLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      sidebarLinks.forEach(link => link.classList.remove('active'));
-      link.classList.add('active');
-
-      const sectionId = link.getAttribute('data-section');
-      dashboardSections.forEach(section => {
-        section.classList.remove('active');
-        if (section.id === sectionId) {
-          section.classList.add('active');
+            setTimeout(() => {
+                errorToast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => errorToast.classList.add('hidden'), 300);
+            }, 5000);
         }
-      });
 
-      if (window.innerWidth <= 992) {
-        sidebar.classList.remove('show');
-      }
-    });
-  });
+        // Check authentication state
+        async function checkAuth() {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            
+            if (user) {
+                authContainer.style.display = 'none';
+                loadUserProfile(user);
+            } else {
+                authContainer.style.display = 'flex';
+            }
+        }
 
-  // Dropdown menu navigation
-  document.querySelectorAll('.dropdown-item').forEach(item => {
-    const sectionId = item.getAttribute('data-section');
-    if (sectionId) {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
+        // Load user profile data
+        async function loadUserProfile(user) {
+            try {
+                // Get user profile from profiles table
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
 
-        dashboardSections.forEach(section => {
-          section.classList.remove('active');
-          if (section.id === sectionId) {
-            section.classList.add('active');
-          }
+                if (error) throw error;
+
+                // Set user display name
+                const displayName = profile?.username || user.email.split('@')[0];
+                const initials = displayName.charAt(0).toUpperCase();
+                
+                // Update UI elements
+                userInitials.textContent = initials;
+                profileInitials.textContent = initials;
+                username.textContent = displayName;
+                welcomeUsername.textContent = displayName;
+                profileName.textContent = displayName;
+                profileFullName.textContent = displayName;
+                profileEmail.textContent = user.email;
+
+                // If profile exists, update other fields
+                if (profile) {
+                    document.getElementById('profilePhone').textContent = profile.phone || 'Not provided';
+                    document.getElementById('profileAddress').textContent = profile.address || 'Not provided';
+                    document.getElementById('profileEmergencyContact').textContent = profile.emergency_contact || 'Not provided';
+                    document.getElementById('profileDepartment').textContent = profile.department || 'Operations';
+                    document.getElementById('profilePositionDisplay').textContent = profile.position || 'Employee';
+                    document.getElementById('profilePosition').textContent = profile.position || 'Employee';
+                    document.getElementById('profileEmployeeId').textContent = profile.employee_id || `EMP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+                    document.getElementById('profileJoinDate').textContent = profile.join_date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    
+                    // Stats
+                    document.getElementById('totalShifts').textContent = profile.total_shifts || 0;
+                    document.getElementById('totalHours').textContent = profile.total_hours || 0;
+                    document.getElementById('yearsWorked').textContent = profile.years_worked || 0;
+
+                    // Set avatar if exists
+                    if (profile.avatar_url) {
+                        setProfilePicture(profile.avatar_url);
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+                showError('Failed to load profile data');
+            }
+        }
+
+        // Set profile picture from URL
+        function setProfilePicture(url) {
+            const avatar = document.getElementById('profileInitials');
+            const smallAvatar = document.getElementById('userInitials');
+            
+            avatar.style.backgroundImage = `url(${url})`;
+            avatar.style.backgroundSize = 'cover';
+            avatar.style.backgroundPosition = 'center';
+            avatar.textContent = '';
+            
+            smallAvatar.style.backgroundImage = `url(${url})`;
+            smallAvatar.style.backgroundSize = 'cover';
+            smallAvatar.style.backgroundPosition = 'center';
+            smallAvatar.textContent = '';
+        }
+
+        // Logout
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                showError('Error signing out: ' + error.message);
+            } else {
+                window.location.href = './login.html';
+            }
         });
 
+        // Sidebar toggle
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+        });
+
+        // User menu toggle
+        userDropdown.addEventListener('click', () => {
+            userMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!userDropdown.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.remove('show');
+            }
+        });
+
+        // Sidebar navigation
         sidebarLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('data-section') === sectionId) {
-            link.classList.add('active');
-          }
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                sidebarLinks.forEach(link => link.classList.remove('active'));
+                link.classList.add('active');
+
+                const sectionId = link.getAttribute('data-section');
+                dashboardSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                    }
+                });
+
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('show');
+                }
+            });
         });
 
-        userMenu.classList.remove('show');
-      });
-    }
-  });
+        // Dropdown menu navigation
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            const sectionId = item.getAttribute('data-section');
+            if (sectionId) {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
 
-  // Duty toggle logic
-  let shiftTimer;
-  let startTime;
+                    dashboardSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === sectionId) {
+                            section.classList.add('active');
+                        }
+                    });
 
-  dutyToggle.addEventListener('change', () => {
-    if (dutyToggle.checked) {
-      dutyStatusText.textContent = 'Currently ON Duty';
-      currentStatus.textContent = 'On Duty';
-      shiftDetails.style.display = 'block';
+                    sidebarLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('data-section') === sectionId) {
+                            link.classList.add('active');
+                        }
+                    });
 
-      startTime = new Date();
-      const formattedDate = startTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      const formattedTime = startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-      shiftStartTime.textContent = `${formattedDate} • ${formattedTime}`;
+                    userMenu.classList.remove('show');
+                });
+            }
+        });
 
-      shiftTimer = setInterval(updateDuration, 1000);
-    } else {
-      dutyStatusText.textContent = 'Currently OFF Duty';
-      currentStatus.textContent = 'Off Duty';
-      shiftDetails.style.display = 'none';
-      clearInterval(shiftTimer);
-    }
-  });
+        // Duty toggle logic
+        let shiftTimer;
+        let startTime;
 
-  function updateDuration() {
-    if (!startTime) return;
-    const now = new Date();
-    const diff = now - startTime;
-    const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, '0');
-    const minutes = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
-    const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
-    shiftDuration.textContent = `${hours}:${minutes}:${seconds}`;
-  }
+        dutyToggle.addEventListener('change', () => {
+            if (dutyToggle.checked) {
+                dutyStatusText.textContent = 'Currently ON Duty';
+                currentStatus.textContent = 'On Duty';
+                shiftDetails.style.display = 'block';
 
-  // Form submissions
-  document.getElementById('newShiftForm')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('Shift request submitted successfully!');
-    e.target.reset();
-  });
+                startTime = new Date();
+                const formattedDate = startTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const formattedTime = startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                shiftStartTime.textContent = `${formattedDate} • ${formattedTime}`;
 
-  document.getElementById('newApplicationForm')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('Application submitted successfully!');
-    e.target.reset();
-  });
+                shiftTimer = setInterval(updateDuration, 1000);
+            } else {
+                dutyStatusText.textContent = 'Currently OFF Duty';
+                currentStatus.textContent = 'Off Duty';
+                shiftDetails.style.display = 'none';
+                clearInterval(shiftTimer);
+            }
+        });
 
-</script>
+        function updateDuration() {
+            if (!startTime) return;
+            const now = new Date();
+            const diff = now - startTime;
+            const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, '0');
+            const minutes = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
+            const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+            shiftDuration.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Form submissions
+        document.getElementById('newShiftForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Shift request submitted successfully!');
+            e.target.reset();
+        });
+
+        document.getElementById('newApplicationForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Application submitted successfully!');
+            e.target.reset();
+        });
+
+        // Profile Section Functionality
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const personalInfoSection = document.getElementById('personalInfoSection');
+        const editProfileSection = document.getElementById('editProfileSection');
+        const editProfileForm = document.getElementById('editProfileForm');
+        const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+        const avatarUpload = document.getElementById('avatarUpload');
+        const avatarUploadStatus = document.getElementById('avatarUploadStatus');
+        const showPasswordFormBtn = document.getElementById('showPasswordFormBtn');
+        const changePasswordSection = document.getElementById('changePasswordSection');
+        const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
+        const changePasswordForm = document.getElementById('changePasswordForm');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const savePasswordBtn = document.getElementById('savePasswordBtn');
+        const notificationSettingsBtn = document.getElementById('notificationSettingsBtn');
+        const twoFactorAuthBtn = document.getElementById('twoFactorAuthBtn');
+        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+
+        // Toggle between view and edit modes
+        editProfileBtn.addEventListener('click', () => {
+            personalInfoSection.style.display = 'none';
+            editProfileSection.style.display = 'block';
+            changePasswordSection.style.display = 'none';
+            
+            // Populate form with current values
+            document.getElementById('editFullName').value = document.getElementById('profileFullName').textContent;
+            document.getElementById('editPhone').value = document.getElementById('profilePhone').textContent.replace('Not provided', '');
+            document.getElementById('editAddress').value = document.getElementById('profileAddress').textContent.replace('Not provided', '');
+            document.getElementById('editEmergencyContact').value = document.getElementById('profileEmergencyContact').textContent.replace('Not provided', '');
+        });
+
+        cancelEditBtn.addEventListener('click', () => {
+            personalInfoSection.style.display = 'block';
+            editProfileSection.style.display = 'none';
+        });
+
+        // Handle profile picture change
+        changeAvatarBtn.addEventListener('click', () => {
+            avatarUpload.click();
+        });
+
+        avatarUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Check if file is an image
+            if (!file.type.match('image.*')) {
+                avatarUploadStatus.textContent = 'Please select an image file';
+                return;
+            }
+            
+            // Check file size (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                avatarUploadStatus.textContent = 'Image must be less than 2MB';
+                return;
+            }
+            
+            try {
+                avatarUploadStatus.textContent = 'Uploading...';
+                changeAvatarBtn.disabled = true;
+                
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                if (!user) throw new Error('User not authenticated');
+                
+                // Upload to Supabase Storage
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${user.id}.${fileExt}`;
+                const filePath = `avatars/${fileName}`;
+                
+                const { error: uploadError } = await supabase.storage
+                    .from('avatars')
+                    .upload(filePath, file, {
+                        cacheControl: '3600',
+                        upsert: true
+                    });
+                
+                if (uploadError) throw uploadError;
+                
+                // Get public URL
+                const { data: { publicUrl } } = supabase.storage
+                    .from('avatars')
+                    .getPublicUrl(filePath);
+                
+                // Update profile with avatar URL
+                const { error: updateError } = await supabase
+                    .from('profiles')
+                    .update({ avatar_url: publicUrl })
+                    .eq('id', user.id);
+                
+                if (updateError) throw updateError;
+                
+                // Update UI
+                setProfilePicture(publicUrl);
+                avatarUploadStatus.textContent = 'Upload successful!';
+                
+            } catch (error) {
+                console.error("Error uploading profile picture:", error);
+                avatarUploadStatus.textContent = 'Upload failed. Please try again.';
+            } finally {
+                changeAvatarBtn.disabled = false;
+                setTimeout(() => {
+                    avatarUploadStatus.textContent = '';
+                }, 3000);
+            }
+        });
+
+        // Password change functionality
+        showPasswordFormBtn.addEventListener('click', () => {
+            personalInfoSection.style.display = 'none';
+            editProfileSection.style.display = 'none';
+            changePasswordSection.style.display = 'block';
+        });
+
+        cancelPasswordBtn.addEventListener('click', () => {
+            personalInfoSection.style.display = 'block';
+            changePasswordSection.style.display = 'none';
+            changePasswordForm.reset();
+        });
+
+        // Form submissions
+        editProfileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                // Show loading state
+                document.getElementById('saveProfileText').style.display = 'none';
+                document.getElementById('saveProfileSpinner').style.display = 'inline';
+                saveProfileBtn.disabled = true;
+                
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                if (!user) throw new Error('User not authenticated');
+                
+                const updatedData = {
+                    username: document.getElementById('editFullName').value,
+                    phone: document.getElementById('editPhone').value,
+                    address: document.getElementById('editAddress').value,
+                    emergency_contact: document.getElementById('editEmergencyContact').value,
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Update Supabase profile
+                const { error } = await supabase
+                    .from('profiles')
+                    .update(updatedData)
+                    .eq('id', user.id);
+                
+                if (error) throw error;
+                
+                // Update display
+                loadUserProfile(user);
+                
+                // Show success message
+                alert('Profile updated successfully!');
+                
+                // Return to view mode
+                personalInfoSection.style.display = 'block';
+                editProfileSection.style.display = 'none';
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                showError("Failed to update profile. Please try again.");
+            } finally {
+                // Reset button state
+                document.getElementById('saveProfileText').style.display = 'inline';
+                document.getElementById('saveProfileSpinner').style.display = 'none';
+                saveProfileBtn.disabled = false;
+            }
+        });
+
+        changePasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showError('New passwords do not match!');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showError('Password must be at least 6 characters long');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                document.getElementById('savePasswordText').style.display = 'none';
+                document.getElementById('savePasswordSpinner').style.display = 'inline';
+                savePasswordBtn.disabled = true;
+                
+                // Update password with Supabase
+                const { error } = await supabase.auth.updateUser({
+                    password: newPassword
+                });
+                
+                if (error) throw error;
+                
+                // Show success message
+                alert('Password changed successfully!');
+                
+                // Reset the form and return to view mode
+                changePasswordForm.reset();
+                personalInfoSection.style.display = 'block';
+                changePasswordSection.style.display = 'none';
+            } catch (error) {
+                console.error("Error changing password:", error);
+                showError('Failed to change password. Please try again.');
+            } finally {
+                // Reset button state
+                document.getElementById('savePasswordText').style.display = 'inline';
+                document.getElementById('savePasswordSpinner').style.display = 'none';
+                savePasswordBtn.disabled = false;
+            }
+        });
+
+        // Delete account with confirmation
+        deleteAccountBtn.addEventListener('click', async () => {
+            if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                if (!user) throw new Error('User not authenticated');
+                
+                // Delete user from auth and profile
+                const { error: deleteError } = await supabase.auth.admin.deleteUser(user.id);
+                
+                if (deleteError) throw deleteError;
+                
+                // Delete profile data (optional)
+                await supabase
+                    .from('profiles')
+                    .delete()
+                    .eq('id', user.id);
+                
+                // Sign out and redirect
+                await supabase.auth.signOut();
+                window.location.href = './login.html';
+            } catch (error) {
+                console.error("Error deleting account:", error);
+                showError('Failed to delete account. Please try again.');
+            }
+        });
+                // Notification settings toggle
+        notificationSettingsBtn.addEventListener('click', () => {
+            // Navigate to notifications section and scroll to settings
+            dashboardSections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === 'notifications') {
+                    section.classList.add('active');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-section') === 'notifications') {
+                    link.classList.add('active');
+                }
+            });
+
+            // Scroll to settings section
+            setTimeout(() => {
+                const settingsSection = document.querySelector('#notifications .section:last-child');
+                settingsSection.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        });
+
+        // Two-factor authentication button
+        twoFactorAuthBtn.addEventListener('click', () => {
+            alert('Two-factor authentication setup would be implemented here');
+        });
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 992 && !sidebar.contains(e.target) && 
+                    e.target !== sidebarToggle && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('show');
+                }
+            });
+
+            // Initialize tooltips (if using any)
+            // Initialize any other plugins or components
+        });
+
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 992) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        // Initialize any charts if needed (using Chart.js for example)
+        function initCharts() {
+            // Example: Weekly hours chart
+            const ctx = document.createElement('canvas');
+            ctx.id = 'weeklyHoursChart';
+            document.querySelector('#dashboard .section:first-child').appendChild(ctx);
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Hours Worked',
+                        data: [8, 7.5, 8, 6, 8.5, 4, 0],
+                        backgroundColor: 'rgba(108, 141, 250, 0.7)',
+                        borderColor: 'rgba(108, 141, 250, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            initCharts(); // Initialize charts if needed
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 992 && !sidebar.contains(e.target) && 
+                    e.target !== sidebarToggle && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('show');
+                }
+            });
+        });
+
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 992) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
 </body>
 </html>

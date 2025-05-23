@@ -8,8 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -52,8 +50,7 @@
   </script>
   <style>
     body {
-      background: linear-gradient(135deg, rgba(14, 14, 14, 0.9), rgba(87, 14, 14, 0.9))
-                  /* url('https://i.imgur.com/3QXJ1Ww.jpg') no-repeat center center fixed */;
+      background: linear-gradient(135deg, rgba(14, 14, 14, 0.9), rgba(87, 14, 14, 0.9));
       background-size: cover;
       min-height: 100vh;
       display: flex;
@@ -287,103 +284,118 @@
     </div>
   </div>
 
+  <!-- Error Toast -->
+  <div id="errorToast" class="fixed bottom-4 right-4 bg-red-700 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden transform translate-y-10 opacity-0 transition-all duration-300">
+    <div class="flex items-center">
+      <i class="fas fa-exclamation-circle mr-2"></i>
+      <span id="errorMessage"></span>
+    </div>
+  </div>
+
   <!-- JS Validation and Effects -->
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCkB5XgzqdgnojBqvMeH9kteHf0i_xVxr0",
-    authDomain: "workflowdashboard-71cf3.firebaseapp.com",
-    projectId: "workflowdashboard-71cf3",
-    storageBucket: "workflowdashboard-71cf3.appspot.com",
-    messagingSenderId: "602480847636",
-    appId: "1:602480847636:web:28f264f19cb585f529f001"
-  };
+    const supabaseUrl = "https://utruicibsnjfiqcefcpi.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0cnVpY2lic25qZmlxY2VmY3BpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3ODkxNzEsImV4cCI6MjA2MzM2NTE3MX0.ac3ykDbm541imq1Dnyr0iQB23wjFkxHna5CD6hSMPt4";
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const loginSuccessModal = document.getElementById('loginSuccessModal');
+    const progressBar = document.getElementById('progressBar');
+    const errorToast = document.getElementById('errorToast');
+    const errorMessage = document.getElementById('errorMessage');
 
-  // Login form handling
-  document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
-
-    emailError.classList.add('hidden');
-    passwordError.classList.add('hidden');
-
-    if (!email.value.trim()) {
-      emailError.textContent = 'Email is required';
-      emailError.classList.remove('hidden');
-      return;
+    // Check if user is already logged in
+    async function checkAuth() {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      
+      if (user) {
+        // User is already logged in, redirect to dashboard
+        window.location.href = 'Dashboard.html';
+      }
     }
 
-    if (!password.value.trim()) {
-      passwordError.textContent = 'Password is required';
-      passwordError.classList.remove('hidden');
-      return;
+    // Show error toast
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorToast.classList.remove('hidden');
+      setTimeout(() => {
+        errorToast.classList.remove('translate-y-10', 'opacity-0');
+        errorToast.classList.add('translate-y-0', 'opacity-100');
+      }, 10);
+
+      setTimeout(() => {
+        errorToast.classList.add('translate-y-10', 'opacity-0');
+        setTimeout(() => errorToast.classList.add('hidden'), 300);
+      }, 5000);
     }
 
-    signInWithEmailAndPassword(auth, email.value, password.value)
-      .then(userCredential => {
-        const user = userCredential.user;
-        document.getElementById('loginSuccessModal').classList.remove('hidden');
+    // Handle login form submission
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('remember').checked;
 
+      // Basic validation
+      if (!email) {
+        showError('Email is required');
+        return;
+      }
+
+      if (!password) {
+        showError('Password is required');
+        return;
+      }
+
+      try {
+        // Sign in with Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        // Show success modal
+        loginSuccessModal.classList.remove('hidden');
+        
         // Animate progress bar
         let width = 0;
-        const progressBar = document.getElementById('progressBar');
         const interval = setInterval(() => {
+          width += 1;
+          progressBar.style.width = width + '%';
+          
           if (width >= 100) {
             clearInterval(interval);
-            window.location.href = './Dashboard.html';
-          } else {
-            width += 5;
-            progressBar.style.width = width + '%';
+            window.location.href = 'Dashboard.html';
           }
-        }, 100);
-      })
-      .catch(error => {
-        const code = error.code;
-        if (code === 'auth/invalid-email' || code === 'auth/user-not-found') {
-          emailError.textContent = 'Invalid email or account not found';
-          emailError.classList.remove('hidden');
-        } else if (code === 'auth/wrong-password') {
-          passwordError.textContent = 'Incorrect password';
-          passwordError.classList.remove('hidden');
-        } else {
-          passwordError.textContent = 'Login failed: ' + error.message;
-          passwordError.classList.remove('hidden');
-        }
-      });
-  });
+        }, 30);
 
-  // Redirect already-logged-in users
-   onAuthStateChanged(auth, user => {
-     if (user) {
-       window.location.href = './Dashboard.html';
-     }
-   });
+      } catch (error) {
+        console.error('Login error:', error);
+        showError(error.message || 'Login failed. Please try again.');
+      }
+    });
 
-  // Password toggle
-  document.getElementById('togglePassword').addEventListener('click', function () {
-    const passwordInput = document.getElementById('password');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
-  });
+    // Password toggle
+    document.getElementById('togglePassword').addEventListener('click', function () {
+      const passwordInput = document.getElementById('password');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+    });
 
-  // Mobile menu toggle
-  document.getElementById('mobileMenuButton').addEventListener('click', function () {
-    document.getElementById('mobileMenu').classList.toggle('hidden');
-  });
-</script>
+    // Mobile menu toggle
+    document.getElementById('mobileMenuButton').addEventListener('click', function () {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
+    // Check auth state on page load
+    checkAuth();
+  </script>
 </body>
 </html>
