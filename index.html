@@ -675,7 +675,7 @@
         
         <!-- In-Game Staff Form (Hidden by Default) -->
         <div id="inGameForm" class="application-form bg-lsrp-gray p-8 rounded-xl shadow-lg hidden">
-          <form id="in-game-form" action="https://formspree.io/f/xldbnzdo" method="POST">
+          <form id="in-game-form" action="https://formspree.io/f/xbloeejk" method="POST">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label class="block text-gray-300 text-sm font-medium mb-2">User's In-Game Name</label>
@@ -753,7 +753,7 @@
         
 <!-- SHR Form (Hidden by Default) -->
 <div id="shrForm" class="application-form bg-lsrp-gray p-8 rounded-xl shadow-lg hidden">
-  <form id="shr-form" action="https://formspree.io/f/xldbnzdo" method="POST">
+  <form id="shr-form" action="https://formspree.io/f/mnndyyqb" method="POST">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
       <div>
         <label class="block text-gray-300 text-sm font-medium mb-2">In-Game Name</label>
@@ -978,6 +978,70 @@
   async function handleSubmit(event) {
     event.preventDefault();
     var status = document.getElementById("my-form-status");
+    var data = new FormData(event.target);
+    fetch(event.target.action, {
+      method: form.method,
+      body: data,
+      headers: {
+          'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) {
+        status.innerHTML = "Thanks for your submission!";
+        form.reset()
+      } else {
+        response.json().then(data => {
+          if (Object.hasOwn(data, 'errors')) {
+            status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+          } else {
+            status.innerHTML = "Oops! There was a problem submitting your form"
+          }
+        })
+      }
+    }).catch(error => {
+      status.innerHTML = "Oops! There was a problem submitting your form"
+    });
+  }
+  form.addEventListener("submit", handleSubmit)
+</script>
+<script>
+  var form = document.getElementById("in-game-form");
+  
+  async function handleSubmit(event) {
+    event.preventDefault();
+    var status = document.getElementById("in-game-form-status");
+    var data = new FormData(event.target);
+    fetch(event.target.action, {
+      method: form.method,
+      body: data,
+      headers: {
+          'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) {
+        status.innerHTML = "Thanks for your submission!";
+        form.reset()
+      } else {
+        response.json().then(data => {
+          if (Object.hasOwn(data, 'errors')) {
+            status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+          } else {
+            status.innerHTML = "Oops! There was a problem submitting your form"
+          }
+        })
+      }
+    }).catch(error => {
+      status.innerHTML = "Oops! There was a problem submitting your form"
+    });
+  }
+  form.addEventListener("submit", handleSubmit)
+</script>
+<script>
+  var form = document.getElementById("shr-form");
+  
+  async function handleSubmit(event) {
+    event.preventDefault();
+    var status = document.getElementById("shr-form-status");
     var data = new FormData(event.target);
     fetch(event.target.action, {
       method: form.method,
