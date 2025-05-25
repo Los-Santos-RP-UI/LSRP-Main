@@ -334,7 +334,7 @@
   </div>
 
   <!-- JS Validation and Effects -->
-  <script type="module">
+<script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
     const supabaseUrl = "https://utruicibsnjfiqcefcpi.supabase.co";
@@ -389,6 +389,32 @@
       }
 
       try {
+        // First, check if username is already taken
+        const { data: existingUser, error: usernameError } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('username', username)
+          .single();
+
+        if (existingUser) {
+          showError('Username is already taken');
+          document.getElementById('username').classList.add('animate-shake');
+          return;
+        }
+
+        // Check if email is already registered
+        const { data: existingEmail, error: emailError } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('email', email)
+          .single();
+
+        if (existingEmail) {
+          showError('Email is already registered');
+          document.getElementById('email').classList.add('animate-shake');
+          return;
+        }
+
         // Register user with Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
@@ -416,7 +442,12 @@
             }
           ]);
 
-        if (profileError) throw profileError;
+        if (profileError) {
+          // If profile creation fails, we can't delete the auth user with anonymous key
+          // Instead, we'll show an error and ask the user to contact support
+          console.error('Profile creation failed:', profileError);
+          throw new Error('Registration incomplete. Please contact support.');
+        }
 
         // Show success modal
         successModal.classList.remove('hidden');
@@ -568,6 +599,70 @@
 
     // Check auth state on page load
     checkAuth();
-  </script>
+</script>
+<script type="module" src="">
+    // register.html JavaScript fix
+  document.addEventListener('DOMContentLoaded', () => {
+      const registerForm = document.getElementById('registrationForm');
+      
+      registerForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const formData = new FormData(registerForm);
+          const response = await fetch('/api/register', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(Object.fromEntries(formData))
+          });
+
+          const result = await response.json();
+          
+          if (result.success) {
+              // Only show success message if server confirms
+              document.getElementById('successMessage').classList.remove('hidden');
+              setTimeout(() => {
+                  window.location.href = '/dashboard.html';
+              }, 3000);
+          } else {
+              // Show error message from server
+              document.getElementById('errorMessage').textContent = result.message;
+              document.getElementById('errorMessage').classList.remove('hidden');
+              document.getElementById('successMessage').classList.add('hidden');
+          }
+      });
+
+      // Add real-time validation
+      registerForm.querySelectorAll('input').forEach(input => {
+          input.addEventListener('input', () => {
+              validateField(input);
+          });
+      });
+  });
+
+  function validateField(field) {
+      const errorElement = document.getElementById(`${field.id}Error`);
+      
+      if (field.value.trim() === '') {
+          errorElement.textContent = 'This field is required';
+          return false;
+      }
+      
+      if (field.type === 'email' && !/^\S+@\S+\.\S+$/.test(field.value)) {
+          errorElement.textContent = 'Invalid email format';
+          return false;
+      }
+      
+      if (field.id === 'password' && field.value.length < 8) {
+          errorElement.textContent = 'Password must be at least 8 characters';
+          return false;
+      }
+      
+      errorElement.textContent = '';
+      return true;
+  }
+
+</script>
 </body>
 </html>

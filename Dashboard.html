@@ -2008,7 +2008,7 @@
                 window.location.href = './login.html';
             } catch (error) {
                 console.error("Error deleting account:", error);
-                showError('Failed to delete account. Please try again.');
+                showError('Failed to delete account. Please try.');
             }
         });
                 // Notification settings toggle
@@ -2158,6 +2158,94 @@
             e.preventDefault();
             alert('Application submitted successfully! Now a IA will contact you in your discord dms.');
             e.target.reset();
+        });
+    </script>
+    <script type="module" src="">
+        // Sidebar toggle for mobile
+        sidebarToggle?.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+        });
+
+        // User dropdown toggle
+        userDropdown?.addEventListener('click', () => {
+            userMenu.classList.toggle('show');
+        });
+
+        // Close dropdown if clicked outside
+        document.addEventListener('click', (e) => {
+            if (!userDropdown.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.remove('show');
+            }
+        });
+
+        // Sidebar navigation & section switching
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.getAttribute('data-section');
+
+                // Remove active class
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                // Show section
+                dashboardSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                    }
+                });
+
+                // Hide sidebar on mobile
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('show');
+                }
+            });
+        });
+
+        // Dropdown menu items section switching
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            const sectionId = item.getAttribute('data-section');
+            if (sectionId) {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    // Show section
+                    dashboardSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === sectionId) {
+                            section.classList.add('active');
+                        }
+                    });
+
+                    // Sync sidebar link
+                    sidebarLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('data-section') === sectionId) {
+                            link.classList.add('active');
+                        }
+                    });
+
+                    userMenu.classList.remove('show');
+                });
+            }
+        });
+
+        // Auto-close sidebar when clicking outside (on mobile)
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 992 &&
+                !sidebar.contains(e.target) &&
+                e.target !== sidebarToggle &&
+                !sidebarToggle.contains(e.target)) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        // Reset sidebar when window is resized to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 992) {
+                sidebar.classList.remove('show');
+            }
         });
     </script>
 </body>
